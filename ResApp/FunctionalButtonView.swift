@@ -1024,26 +1024,112 @@ struct EventRowView: View {
 
 struct MedicationPickerSheet: View {
     let medications = [
-        "Atropine", "Calcium", "D50", "Dopamine infusion",
-        "Lidocaine", "Magnesium", "NaHCO₃", "Others"
+        ("Atropine", "0.5-1mg IV", "pills.fill"),
+        ("Calcium Chloride", "10ml (10% solution)", "testtube.2"),
+        ("Dextrose 50%", "50ml IV push", "syringe.fill"),
+        ("Dopamine", "5-20mcg/kg/min infusion", "iv.bag.fill"),
+        ("Lidocaine", "1-1.5mg/kg IV bolus", "pills.fill"),
+        ("Magnesium Sulfate", "2g IV over 10min", "testtube.2"),
+        ("Sodium Bicarbonate", "1mEq/kg IV", "flask.fill"),
+        ("Other Medication", "Custom entry", "plus.circle.fill")
     ]
     var onSelect: (String?) -> Void
     
     var body: some View {
-        NavigationView {
-            List(medications, id: \ .self) { med in
-                Button(action: { onSelect(med) }) {
-                    Text(med)
-                        .font(.title3)
-                        .padding()
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                // Header
+                HStack {
+                    Button("Cancel") {
+                        onSelect(nil)
+                    }
+                    .font(.system(size: geometry.size.width * 0.045, weight: .medium))
+                    .foregroundColor(.blue)
+                    
+                    Spacer()
+                    
+                    HStack(spacing: geometry.size.width * 0.02) {
+                        Image(systemName: "syringe.fill")
+                            .font(.system(size: geometry.size.width * 0.05, weight: .bold))
+                            .foregroundColor(.green)
+                        
+                        Text("Select Medication")
+                            .font(.system(size: geometry.size.width * 0.055, weight: .bold))
+                            .foregroundColor(.primary)
+                    }
+                    
+                    Spacer()
+                    
+                    // Invisible button for balance
+                    Button("Cancel") { }
+                        .opacity(0)
+                        .disabled(true)
                 }
-            }
-            .navigationTitle("Select Medication")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { onSelect(nil) }
+                .padding(.horizontal, geometry.size.width * 0.05)
+                .padding(.vertical, geometry.size.height * 0.02)
+                .background(Color(UIColor.systemBackground))
+                .overlay(
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(Color.gray.opacity(0.3)),
+                    alignment: .bottom
+                )
+                
+                // Medication List
+                ScrollView {
+                    LazyVStack(spacing: geometry.size.height * 0.015) {
+                        ForEach(Array(medications.enumerated()), id: \.offset) { index, medication in
+                            MedicationOptionView(
+                                title: medication.0,
+                                subtitle: medication.1,
+                                icon: medication.2,
+                                geometry: geometry
+                            ) {
+                                onSelect(medication.0)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, geometry.size.width * 0.04)
+                    .padding(.vertical, geometry.size.height * 0.02)
                 }
+                .background(Color(UIColor.systemGroupedBackground))
             }
         }
+        .background(Color(UIColor.systemGroupedBackground))
+    }
+}
+
+struct MedicationOptionView: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    let geometry: GeometryProxy
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: geometry.size.width * 0.04) {
+                // Text Content
+                VStack(alignment: .leading, spacing: geometry.size.height * 0.008) {
+                    Text(title)
+                        .font(.system(size: geometry.size.width * 0.05, weight: .bold))
+                        .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text(subtitle)
+                        .font(.system(size: geometry.size.width * 0.04, weight: .medium))
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal, geometry.size.width * 0.04)
+            .padding(.vertical, geometry.size.height * 0.02)
+            .background(Color(UIColor.systemBackground))
+            .cornerRadius(geometry.size.width * 0.03)
+            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
