@@ -118,10 +118,10 @@ struct FunctionalButtonView: View {
             // Timer - Most Critical Information
             HStack(spacing: geometry.size.width * 0.015) {
                 Image(systemName: "stopwatch")
-                    .font(.system(size: geometry.size.width * 0.022, weight: .bold))
+                    .font(.system(size: geometry.size.width * 0.025, weight: .bold))
                     .foregroundColor(.brown)
                 Text(formattedElapsedTime)
-                    .font(.system(size: geometry.size.width * 0.038, weight: .black, design: .monospaced))
+                    .font(.system(size: geometry.size.width * 0.035, weight: .black, design: .monospaced))
                     .foregroundColor(.brown)
             }
             .padding(.horizontal, geometry.size.width * 0.02)
@@ -136,7 +136,7 @@ struct FunctionalButtonView: View {
                 }
             }) {
                 Text("+30s")
-                    .font(.system(size: geometry.size.width * 0.014, weight: .bold))
+                    .font(.system(size: geometry.size.width * 0.018, weight: .bold))
                     .foregroundColor(.red)
                     .padding(.horizontal, geometry.size.width * 0.008)
                     .padding(.vertical, geometry.size.height * 0.004)
@@ -154,7 +154,7 @@ struct FunctionalButtonView: View {
             // Patient Outcome
             VStack(spacing: geometry.size.height * 0.008) {
                 Text("Patient Outcome")
-                    .font(.system(size: geometry.size.width * 0.016, weight: .semibold))
+                    .font(.system(size: geometry.size.width * 0.018, weight: .semibold))
                     .foregroundColor(.primary)
                 
                 HStack(spacing: geometry.size.width * 0.012) {
@@ -205,10 +205,10 @@ struct FunctionalButtonView: View {
                 
                 VStack(spacing: geometry.size.height * 0.006) {
                     Text("ROSC")
-                        .font(.system(size: geometry.size.width * 0.022, weight: .bold))
+                        .font(.system(size: geometry.size.width * 0.028, weight: .bold))
                     if !formattedDefibrillationTime.isEmpty {
                         Text(formattedDefibrillationTime)
-                            .font(.system(size: geometry.size.width * 0.016, weight: .medium))
+                            .font(.system(size: geometry.size.width * 0.030, weight: .medium))
                     }
                 }
                 .foregroundColor(.white)
@@ -244,19 +244,19 @@ struct FunctionalButtonView: View {
     
     private func energySection(geometry: GeometryProxy) -> some View {
         VStack(spacing: geometry.size.height * 0.01) {
-            if selectedEnergy > 0 {
-                if [100, 150, 200, 240].contains(selectedEnergy) {
-                    Text("Selected: Biphasic \(selectedEnergy)J")
-                        .font(.system(size: geometry.size.width * 0.018, weight: .bold))
-                        .foregroundColor(.red)
-                        .padding(.bottom, 2)
-                } else if selectedEnergy == 360 {
-                    Text("Selected: Monophasic 360J")
-                        .font(.system(size: geometry.size.width * 0.018, weight: .bold))
-                        .foregroundColor(.red)
-                        .padding(.bottom, 2)
+                            if selectedEnergy > 0 {
+                    if [100, 150, 200, 240].contains(selectedEnergy) {
+                        Text("Selected: Biphasic \(selectedEnergy)J")
+                            .font(.system(size: geometry.size.width * 0.020, weight: .bold))
+                            .foregroundColor(.red)
+                            .padding(.bottom, 2)
+                    } else if selectedEnergy == 360 {
+                        Text("Selected: Monophasic 360J")
+                            .font(.system(size: geometry.size.width * 0.020, weight: .bold))
+                            .foregroundColor(.red)
+                            .padding(.bottom, 2)
+                    }
                 }
-            }
             HStack(spacing: geometry.size.width * 0.018) {
                 // Lightning Icon
                 VStack {
@@ -310,11 +310,11 @@ struct FunctionalButtonView: View {
             }) {
                 HStack(spacing: geometry.size.width * 0.02) {
                     Text("CPR")
-                        .font(.system(size: geometry.size.width * 0.028, weight: .black))
+                        .font(.system(size: geometry.size.width * 0.030, weight: .black))
                         .foregroundColor(.black)
                     
                     Text(formattedCPRTime)
-                        .font(.system(size: geometry.size.width * 0.025, weight: .black, design: .monospaced))
+                        .font(.system(size: geometry.size.width * 0.026, weight: .black, design: .monospaced))
                         .foregroundColor(.black)
                     
                     Spacer()
@@ -380,7 +380,7 @@ struct FunctionalButtonView: View {
                     showOtherMedicationSheet = true
                 }) {
                     Text("Other\nMedication")
-                        .font(.system(size: geometry.size.width * 0.016, weight: .semibold))
+                        .font(.system(size: geometry.size.width * 0.024, weight: .semibold))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -764,7 +764,7 @@ struct OutcomeButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: geometry.size.width * 0.018, weight: .bold))
+            .font(.system(size: geometry.size.width * 0.020, weight: .bold))
             .foregroundColor(isSelected ? .white : color)
             .padding(.horizontal, geometry.size.width * 0.025)
             .padding(.vertical, geometry.size.height * 0.01)
@@ -783,7 +783,7 @@ struct EventButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: geometry.size.width * 0.018, weight: .semibold))
+            .font(.system(size: geometry.size.width * 0.022, weight: .semibold))
             .foregroundColor(.white)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.gray.opacity(0.8))
@@ -805,10 +805,10 @@ struct RhythmButton: View {
         Button(action: action) {
             VStack(spacing: geometry.size.height * 0.006) {
                 Text(title)
-                    .font(.system(size: geometry.size.width * 0.022, weight: .bold))
+                    .font(.system(size: geometry.size.width * 0.028, weight: .bold))
                 if !subtitle.isEmpty {
                     Text(subtitle)
-                        .font(.system(size: geometry.size.width * 0.016, weight: .medium))
+                        .font(.system(size: geometry.size.width * 0.030, weight: .medium))
                 }
             }
             .foregroundColor(.white)
@@ -832,9 +832,9 @@ struct EnergyButton: View {
         Button(action: action) {
             VStack(spacing: geometry.size.height * 0.008) {
                 Text(type)
-                    .font(.system(size: geometry.size.width * 0.016, weight: .semibold))
+                    .font(.system(size: geometry.size.width * 0.018, weight: .semibold))
                 Text("\(energy)J")
-                    .font(.system(size: geometry.size.width * 0.024, weight: .bold))
+                    .font(.system(size: geometry.size.width * 0.026, weight: .bold))
             }
             .foregroundColor(.white)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -864,19 +864,19 @@ struct MedicationButtonView: View {
                 HStack {
                     VStack(alignment: .leading, spacing: geometry.size.height * 0.004) {
                         Text(title)
-                            .font(.system(size: geometry.size.width * 0.018, weight: .bold))
+                            .font(.system(size: title == "Amiodarone" ? geometry.size.width * 0.018 : geometry.size.width * 0.022, weight: .bold))
                             .frame(maxWidth: .infinity, alignment: .leading)
                         Text(subtitle)
-                            .font(.system(size: geometry.size.width * 0.014, weight: .medium))
+                            .font(.system(size: title == "Amiodarone" ? geometry.size.width * 0.012 : geometry.size.width * 0.015, weight: .medium))
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     Spacer()
                     VStack(spacing: geometry.size.height * 0.002) {
                         Text("dose")
-                            .font(.system(size: geometry.size.width * 0.01, weight: .medium))
+                            .font(.system(size: geometry.size.width * 0.012, weight: .medium))
                         Text("\(doses)")
-                            .font(.system(size: geometry.size.width * 0.016, weight: .bold))
+                            .font(.system(size: geometry.size.width * 0.018, weight: .bold))
                     }
                     .foregroundColor(.white)
                     .padding(.horizontal, geometry.size.width * 0.01)
@@ -1043,7 +1043,7 @@ struct MedicationPickerSheet: View {
                     Button("Cancel") {
                         onSelect(nil)
                     }
-                    .font(.system(size: geometry.size.width * 0.045, weight: .medium))
+                    .font(.system(size: geometry.size.width * 0.055, weight: .medium))
                     .foregroundColor(.blue)
                     
                     Spacer()
@@ -1054,7 +1054,7 @@ struct MedicationPickerSheet: View {
                             .foregroundColor(.green)
                         
                         Text("Select Medication")
-                            .font(.system(size: geometry.size.width * 0.055, weight: .bold))
+                            .font(.system(size: geometry.size.width * 0.065, weight: .bold))
                             .foregroundColor(.primary)
                     }
                     
@@ -1112,12 +1112,12 @@ struct MedicationOptionView: View {
                 // Text Content
                 VStack(alignment: .leading, spacing: geometry.size.height * 0.008) {
                     Text(title)
-                        .font(.system(size: geometry.size.width * 0.05, weight: .bold))
+                        .font(.system(size: geometry.size.width * 0.065, weight: .bold))
                         .foregroundColor(.primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Text(subtitle)
-                        .font(.system(size: geometry.size.width * 0.04, weight: .medium))
+                        .font(.system(size: geometry.size.width * 0.050, weight: .medium))
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
