@@ -275,7 +275,7 @@ struct FunctionalButtonView: View {
             // CPR Single Row Layout - Controlled by guideline system
             Button(action: {
                 if cprTimer == nil {
-                    cprCycleCounter = 1  // Set to 1 when first CPR cycle starts
+                    cprCycleCounter = completedCPRCycles + 1  // Current cycle = completed + 1
                     startCPRTimer()
                     recordECGRhythm("CPR")
                     guidelineSystem.recordCPRStarted()
