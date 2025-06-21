@@ -205,10 +205,39 @@ struct FunctionalButtonView: View {
                     recordECGRhythm("PEA/AS")
                 }
                 
-                RhythmButton(title: "ROSC", subtitle: formattedDefibrillationTime, color: (guidelineSystem.shouldBlinkButton(type: .rosc) && showECG) ? Color(red: 0.2, green: 0.3, blue: 0.7) : Color(red: 0.2, green: 0.3, blue: 0.7).opacity(0.3), geometry: geometry) {
+                VStack(spacing: geometry.size.height * 0.006) {
+                    Text("ROSC")
+                        .font(.system(size: geometry.size.width * 0.022, weight: .bold))
+                    if !formattedDefibrillationTime.isEmpty {
+                        Text(formattedDefibrillationTime)
+                            .font(.system(size: geometry.size.width * 0.016, weight: .medium))
+                    }
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background((guidelineSystem.shouldBlinkButton(type: .rosc) && showECG) ? Color(red: 0.2, green: 0.3, blue: 0.7) : Color(red: 0.2, green: 0.3, blue: 0.7).opacity(0.3))
+                .cornerRadius(geometry.size.width * 0.01)
+                .onTapGesture {
                     recordECGRhythm("ROSC")
                     isROSCAchieved = true
                     showPostCareAlert = true
+                    print("Debug: ROSC button tapped, starting ROSC timer")
+                }
+                .onLongPressGesture(minimumDuration: 3.0) {
+                    // Debug feature: Add 20 minutes to ROSC time when long pressed
+                    print("Debug: ROSC Long press detected!")
+                    print("Debug: isROSCAchieved = \(isROSCAchieved), isROSCActive = \(isROSCActive)")
+                    print("Debug: Current roscTime = \(roscTime)")
+                    
+                    // Add 20 minutes regardless of state for debugging
+                    roscTime += 1200  // Add 20 minutes (1200 seconds)
+                    print("Debug: Added 20 minutes to ROSC time, new time = \(roscTime)")
+                    
+                    // Start ROSC timer if not already running
+                    if !isROSCActive {
+                        startROSCStopwatch()
+                        print("Debug: Started ROSC timer")
+                    }
                 }
             }
         }
