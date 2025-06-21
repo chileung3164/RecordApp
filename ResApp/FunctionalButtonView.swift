@@ -644,18 +644,17 @@ struct FunctionalButtonView: View {
     
     private func startOutcomeBlinkingIfNeeded() {
         outcomeBlinkTimer?.invalidate()
-        if isROSCAchieved {
-            let rosctime = resuscitationManager.events.last(where: { if case .ecgRhythm(let r) = $0.type { return r == "ROSC" } else { return false } })?.timestamp ?? Date()
-            let elapsed = Date().timeIntervalSince(rosctime)
-            if elapsed >= 1200 && patientOutcome == .none {
-                blinkOutcome = true
-                showOutcome = true
-                outcomeBlinkTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { _ in
-                    if self.blinkOutcome {
-                        self.showOutcome.toggle()
-                    } else {
-                        self.showOutcome = true
-                    }
+        // Only start blinking if ROSC timer is currently over 20 minutes AND no outcome selected
+        if roscTime >= 1200 && patientOutcome == .none && isROSCActive {
+            blinkOutcome = true
+            showOutcome = true
+            outcomeBlinkTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { _ in
+                // Double check timer is still over 20 minutes and ROSC is still active
+                if self.roscTime >= 1200 && self.patientOutcome == .none && self.isROSCActive {
+                    self.showOutcome.toggle()
+                } else {
+                    // Stop blinking if conditions no longer met
+                    self.stopOutcomeBlinking()
                 }
             }
         }
@@ -664,6 +663,7 @@ struct FunctionalButtonView: View {
     private func stopOutcomeBlinking() {
         blinkOutcome = false
         outcomeBlinkTimer?.invalidate()
+        outcomeBlinkTimer = nil
         showOutcome = true
     }
     
@@ -690,6 +690,10 @@ struct FunctionalButtonView: View {
         roscTime = 0
         roscTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             roscTime += 1
+            // Check if we've reached 20 minutes (1200 seconds) and start blinking
+            if roscTime >= 1200 && patientOutcome == .none && !blinkOutcome {
+                startOutcomeBlinkingIfNeeded()
+            }
         }
     }
     
@@ -697,6 +701,8 @@ struct FunctionalButtonView: View {
         isROSCActive = false
         roscTimer?.invalidate()
         roscTime = 0
+        // Stop outcome blinking when ROSC timer is reset
+        stopOutcomeBlinking()
     }
     
     private func startAdrenalineBlinkingIfNeeded() {
