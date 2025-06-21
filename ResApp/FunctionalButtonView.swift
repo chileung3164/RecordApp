@@ -482,9 +482,11 @@ struct FunctionalButtonView: View {
                 self.recordEvent("CPR Cycle \(completedCycles) completed")
                 
                 // Notify guideline system
-                if completedCycles == 1 {
+                if completedCycles == 1 && self.guidelineSystem.selectedRhythm == .shockable {
+                    // pVT/VF pathway: first cycle completed, transition to cycle management
                     self.guidelineSystem.recordFirstCPRCycleCompleted()
                 } else {
+                    // PEA/AS pathway or subsequent cycles: continue cycle management
                     self.guidelineSystem.recordCPRCycleCompleted()
                 }
                 

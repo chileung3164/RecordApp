@@ -163,17 +163,18 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
         // Provide guidance based on current CPR cycle phase
         switch cprCyclePhase {
         case .waitingForShock:
-            if currentGuideline == nil {
+            if currentGuideline == nil && selectedRhythm == .shockable {
                 showGuideline(
-                    message: "CPR Cycle \(currentCPRCycle): Deliver shock first",
+                    message: "CPR Cycle \(currentCPRCycle): Deliver shock first (pVT/VF)",
                     phase: .cprCycleManagement,
                     priority: .critical
                 )
             }
         case .waitingForCPR:
             if currentGuideline == nil {
+                let rhythmType = selectedRhythm == .shockable ? "pVT/VF" : "PEA/AS"
                 showGuideline(
-                    message: "CPR Cycle \(currentCPRCycle): Start CPR immediately",
+                    message: "CPR Cycle \(currentCPRCycle): Start CPR immediately (\(rhythmType))",
                     phase: .cprCycleManagement,
                     priority: .critical
                 )
@@ -181,8 +182,9 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
         case .waitingForMedication:
             if currentGuideline == nil {
                 let medicationMessage = getMedicationMessageForCycle(currentCPRCycle)
+                let rhythmType = selectedRhythm == .shockable ? "pVT/VF" : "PEA/AS"
                 showGuideline(
-                    message: "CPR Cycle \(currentCPRCycle): \(medicationMessage)",
+                    message: "CPR Cycle \(currentCPRCycle): \(medicationMessage) (\(rhythmType))",
                     phase: .cprCycleManagement,
                     priority: .high
                 )
@@ -243,19 +245,22 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
     }
     
     private func transitionToNonShockablePhase() {
-        currentPhase = .nonShockableRhythm
+        currentPhase = .cprCycleManagement
+        currentCPRCycle = 1  // PEA/AS starts directly with CPR Cycle 1
+        cprCyclePhase = .waitingForCPR
+        
         shouldBlinkRhythmButtons = false
         shouldBlinkShockButtons = false
         shouldBlinkCPRButton = true
-        shouldBlinkMedicationButtons = true
+        shouldBlinkMedicationButtons = false
         
         showGuideline(
-            message: "PEA/AS detected - Start CPR and prepare medications",
-            phase: .nonShockableRhythm,
+            message: "PEA/AS detected - Start CPR Cycle 1 immediately",
+            phase: .cprCycleManagement,
             priority: .critical
         )
         
-        print("Transitioned to non-shockable rhythm phase - CPR and medication focus")
+        print("PEA/AS pathway: Starting CPR Cycle 1 directly (no shock)")
     }
     
     private func transitionToROSCPhase() {
@@ -352,19 +357,34 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
             currentCPRCycle += 1
             
             if currentCPRCycle <= 10 {
-                // Start next CPR cycle
-                cprCyclePhase = .waitingForShock
-                shouldBlinkShockButtons = true
-                shouldBlinkCPRButton = false
-                shouldBlinkMedicationButtons = false
+                // Start next CPR cycle - different behavior for shockable vs non-shockable
+                if selectedRhythm == .shockable {
+                    // pVT/VF pathway: needs shock before CPR
+                    cprCyclePhase = .waitingForShock
+                    shouldBlinkShockButtons = true
+                    shouldBlinkCPRButton = false
+                    shouldBlinkMedicationButtons = false
+                    
+                    showGuideline(
+                        message: "Starting CPR Cycle \(currentCPRCycle) - Check rhythm and deliver shock",
+                        phase: .cprCycleManagement,
+                        priority: .critical
+                    )
+                } else if selectedRhythm == .nonShockable {
+                    // PEA/AS pathway: go directly to CPR (NO SHOCK)
+                    cprCyclePhase = .waitingForCPR
+                    shouldBlinkShockButtons = false  // NEVER blink for PEA/AS
+                    shouldBlinkCPRButton = true
+                    shouldBlinkMedicationButtons = false
+                    
+                    showGuideline(
+                        message: "Starting CPR Cycle \(currentCPRCycle) - Start CPR immediately (PEA/AS - no shock)",
+                        phase: .cprCycleManagement,
+                        priority: .critical
+                    )
+                }
                 
-                showGuideline(
-                    message: "Starting CPR Cycle \(currentCPRCycle) - Check rhythm and deliver shock",
-                    phase: .cprCycleManagement,
-                    priority: .critical
-                )
-                
-                print("Starting CPR Cycle \(currentCPRCycle)")
+                print("Starting CPR Cycle \(currentCPRCycle) - \(selectedRhythm == .shockable ? "pVT/VF" : "PEA/AS") pathway")
             } else {
                 // All 10 cycles completed
                 showGuideline(
@@ -398,21 +418,43 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
     }
     
     private func shouldCycleHaveMedication(_ cycle: Int) -> Bool {
-        switch cycle {
-        case 2, 4, 6, 8, 10: return true  // Adrenaline cycles
-        case 3, 5: return true            // Amiodarone cycles
-        case 7, 9: return false           // No medication cycles
-        default: return false
+        if selectedRhythm == .shockable {
+            // pVT/VF pathway
+            switch cycle {
+            case 2, 4, 6, 8, 10: return true  // Adrenaline cycles
+            case 3, 5: return true            // Amiodarone cycles
+            case 7, 9: return false           // No medication cycles
+            default: return false
+            }
+        } else if selectedRhythm == .nonShockable {
+            // PEA/AS pathway - only Adrenaline on odd cycles
+            switch cycle {
+            case 1, 3, 5, 7, 9: return true   // Adrenaline cycles
+            case 2, 4, 6, 8, 10: return false // No medication cycles
+            default: return false
+            }
         }
+        return false
     }
     
     private func getMedicationMessageForCycle(_ cycle: Int) -> String {
-        switch cycle {
-        case 2, 4, 6, 8, 10: return "Administer Adrenaline"
-        case 3: return "Administer Amiodarone 300mg (1st dose)"
-        case 5: return "Administer Amiodarone 150mg (2nd dose)"
-        default: return "No medication needed this cycle"
+        if selectedRhythm == .shockable {
+            // pVT/VF pathway
+            switch cycle {
+            case 2, 4, 6, 8, 10: return "Administer Adrenaline"
+            case 3: return "Administer Amiodarone 300mg (1st dose)"
+            case 5: return "Administer Amiodarone 150mg (2nd dose)"
+            default: return "No medication needed this cycle"
+            }
+        } else if selectedRhythm == .nonShockable {
+            // PEA/AS pathway - only Adrenaline
+            switch cycle {
+            case 1, 3, 5, 7, 9: return "Administer Adrenaline"
+            case 2, 4, 6, 8, 10: return "No medication needed this cycle"
+            default: return "No medication needed this cycle"
+            }
         }
+        return "No medication needed this cycle"
     }
     
     func recordMedicationGiven(medication: String) {
@@ -519,15 +561,28 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
     }
     
     private func shouldCycleNeedAdrenaline() -> Bool {
-        return currentPhase == .cprCycleManagement && 
-               cprCyclePhase == .waitingForMedication &&
-               [2, 4, 6, 8, 10].contains(currentCPRCycle)
+        guard currentPhase == .cprCycleManagement && cprCyclePhase == .waitingForMedication else {
+            return false
+        }
+        
+        if selectedRhythm == .shockable {
+            // pVT/VF pathway - Adrenaline on cycles 2, 4, 6, 8, 10
+            return [2, 4, 6, 8, 10].contains(currentCPRCycle)
+        } else if selectedRhythm == .nonShockable {
+            // PEA/AS pathway - Adrenaline on cycles 1, 3, 5, 7, 9
+            return [1, 3, 5, 7, 9].contains(currentCPRCycle)
+        }
+        
+        return false
     }
     
     private func shouldCycleNeedAmiodarone() -> Bool {
-        return currentPhase == .cprCycleManagement && 
-               cprCyclePhase == .waitingForMedication &&
-               [3, 5].contains(currentCPRCycle)
+        guard currentPhase == .cprCycleManagement && cprCyclePhase == .waitingForMedication else {
+            return false
+        }
+        
+        // Amiodarone only for pVT/VF pathway on cycles 3, 5
+        return selectedRhythm == .shockable && [3, 5].contains(currentCPRCycle)
     }
     
     enum ButtonType {
