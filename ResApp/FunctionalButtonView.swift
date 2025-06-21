@@ -53,36 +53,34 @@ struct FunctionalButtonView: View {
     var body: some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
-                // Main Control Panel (Left Side)
-                VStack(spacing: geometry.size.height * 0.008) {
-                    // Header with Timer and Patient Outcome
+                // Main Control Panel (Left Side) - HCI Optimized Layout
+                VStack(spacing: geometry.size.height * 0.018) {
+                    // Header with Timer and Patient Outcome (Critical Information)
                     headerSection(geometry: geometry)
                         .frame(height: geometry.size.height * 0.14)
                     
-                    // Rhythm Section with Icon
+                    // Rhythm Section with Icon (Primary Action)
                     rhythmSection(geometry: geometry)
-                        .frame(height: geometry.size.height * 0.15)
+                        .frame(height: geometry.size.height * 0.16)
                     
-                    // Energy Selection Section with Icon
+                    // Energy Selection Section with Icon (Secondary Action)
                     energySection(geometry: geometry)
-                        .frame(height: geometry.size.height * 0.13)
+                        .frame(height: geometry.size.height * 0.14)
                     
-                    // CPR Section with Icon - Yellow Theme
+                    // CPR Section with Icon (Primary Action)
                     cprSection(geometry: geometry)
-                        .frame(height: geometry.size.height * 0.13)
+                        .frame(height: geometry.size.height * 0.14)
                     
-                    // Medication Section with Icon
+                    // Medication Section with Icon (Secondary Action)
                     medicationSection(geometry: geometry)
-                        .frame(height: geometry.size.height * 0.15)
+                        .frame(height: geometry.size.height * 0.16)
                     
-                    // Other Events Section with Icon
+                    // Other Events Section with Icon (Tertiary Action)
                     otherEventsSection(geometry: geometry)
-                        .frame(height: geometry.size.height * 0.13)
-                    
-                    Spacer()
+                        .frame(height: geometry.size.height * 0.12)
                 }
-                .padding(.horizontal, geometry.size.width * 0.015)
-                .padding(.vertical, geometry.size.height * 0.015)
+                .padding(.horizontal, geometry.size.width * 0.02)
+                .padding(.vertical, geometry.size.height * 0.025)
                 .frame(width: geometry.size.width * 0.75)
                 
                 // Resuscitation Record (Right Side)
