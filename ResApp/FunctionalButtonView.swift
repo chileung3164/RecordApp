@@ -293,11 +293,11 @@ struct FunctionalButtonView: View {
         HStack(spacing: geometry.size.width * 0.018) {
             // CPR Icon
             VStack {
-                Image(systemName: "figure.mind.and.body")
-                    .font(.system(size: geometry.size.width * 0.02, weight: .bold))
-                    .foregroundColor(.orange)
+                Image(systemName: "heart.fill")
+                    .font(.system(size: geometry.size.width * 0.022, weight: .bold))
+                    .foregroundColor(.red)
                     .frame(width: geometry.size.width * 0.04, height: geometry.size.width * 0.04)
-                    .background(Color.yellow.opacity(0.15))
+                    .background(Color.red.opacity(0.15))
                     .cornerRadius(geometry.size.width * 0.01)
             }
             
