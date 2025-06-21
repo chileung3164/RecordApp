@@ -205,7 +205,7 @@ struct FunctionalButtonView: View {
                     recordECGRhythm("PEA/AS")
                 }
                 
-                RhythmButton(title: "ROSC", subtitle: formattedDefibrillationTime, color: (guidelineSystem.shouldBlinkButton(type: .rhythm) && showECG) ? Color(red: 0.2, green: 0.3, blue: 0.7) : Color(red: 0.2, green: 0.3, blue: 0.7).opacity(0.3), geometry: geometry) {
+                RhythmButton(title: "ROSC", subtitle: formattedDefibrillationTime, color: (guidelineSystem.shouldBlinkButton(type: .rosc) && showECG) ? Color(red: 0.2, green: 0.3, blue: 0.7) : Color(red: 0.2, green: 0.3, blue: 0.7).opacity(0.3), geometry: geometry) {
                     recordECGRhythm("ROSC")
                     isROSCAchieved = true
                     showPostCareAlert = true

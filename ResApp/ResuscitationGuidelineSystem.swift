@@ -557,6 +557,9 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
             return shouldBlinkMedicationButtons && shouldCycleNeedAdrenaline()
         case .amiodarone:
             return shouldBlinkMedicationButtons && shouldCycleNeedAmiodarone()
+        case .rosc:
+            // ROSC should blink after initial rhythm selection, but not during initial phase
+            return currentPhase != .rhythmSelection
         }
     }
     
@@ -586,6 +589,6 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
     }
     
     enum ButtonType {
-        case rhythm, shock, cpr, medication, adrenaline, amiodarone
+        case rhythm, shock, cpr, medication, adrenaline, amiodarone, rosc
     }
 }
