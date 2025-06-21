@@ -378,14 +378,17 @@ struct FunctionalButtonView: View {
                     recordMedication("Amiodarone \(dose)")
                     guidelineSystem.recordAmiodarone()
                 }
-                Button("Other\nMedication") {
+                Button(action: {
                     showOtherMedicationSheet = true
+                }) {
+                    Text("Other\nMedication")
+                        .font(.system(size: geometry.size.width * 0.016, weight: .semibold))
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.green.opacity(0.9))
+                        .cornerRadius(geometry.size.width * 0.01)
                 }
-                .font(.system(size: geometry.size.width * 0.016, weight: .semibold))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.green.opacity(0.9))
-                .cornerRadius(geometry.size.width * 0.01)
                 .sheet(isPresented: $showOtherMedicationSheet) {
                     MedicationPickerSheet { selectedMedication in
                         if let med = selectedMedication {
