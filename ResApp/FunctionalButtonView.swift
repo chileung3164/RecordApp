@@ -330,24 +330,24 @@ struct FunctionalButtonView: View {
                     title: "Adrenaline",
                     subtitle: "1mg",
                     doses: adrenalineDoses,
-                    color: showAdrenaline ? .green : .green.opacity(0.3),
+                    color: (guidelineSystem.shouldBlinkButton(type: .adrenaline) && showAdrenaline) ? .green : .green.opacity(0.3),
                     geometry: geometry
                 ) {
                     adrenalineDoses += 1
                     recordMedication("Adrenaline 1mg")
-                    stopAdrenalineBlinking()
+                    guidelineSystem.recordAdrenaline()
                 }
                 MedicationButtonView(
                     title: "Amiodarone",
                     subtitle: "1st 300mg\n2nd 150mg",
                     doses: amiodaroneDoses,
-                    color: showAmiodarone ? .green : .green.opacity(0.3),
+                    color: (guidelineSystem.shouldBlinkButton(type: .amiodarone) && showAmiodarone) ? .green : .green.opacity(0.3),
                     geometry: geometry
                 ) {
                     amiodaroneDoses += 1
                     let dose = amiodaroneDoses == 1 ? "300mg" : "150mg"
                     recordMedication("Amiodarone \(dose)")
-                    stopAmiodaroneBlinking()
+                    guidelineSystem.recordAmiodarone()
                 }
                 Button("Other\nMedication") {
                     showOtherMedicationSheet = true
@@ -480,6 +480,14 @@ struct FunctionalButtonView: View {
                     return false
                 }.count + 1
                 self.recordEvent("CPR Cycle \(completedCycles) completed")
+                
+                // Notify guideline system
+                if completedCycles == 1 {
+                    self.guidelineSystem.recordFirstCPRCycleCompleted()
+                } else {
+                    self.guidelineSystem.recordCPRCycleCompleted()
+                }
+                
                 // Reset for potential next cycle
                 self.cprCounter = 0
             }
@@ -560,6 +568,25 @@ struct FunctionalButtonView: View {
                 self.showCPR.toggle()
             } else {
                 self.showCPR = true
+            }
+        }
+        
+        // Add medication button blinking
+        adrenalineBlinkTimer?.invalidate()
+        adrenalineBlinkTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { _ in
+            if self.guidelineSystem.shouldBlinkButton(type: .adrenaline) {
+                self.showAdrenaline.toggle()
+            } else {
+                self.showAdrenaline = true
+            }
+        }
+        
+        amiodaroneBlinkTimer?.invalidate()
+        amiodaroneBlinkTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { _ in
+            if self.guidelineSystem.shouldBlinkButton(type: .amiodarone) {
+                self.showAmiodarone.toggle()
+            } else {
+                self.showAmiodarone = true
             }
         }
     }

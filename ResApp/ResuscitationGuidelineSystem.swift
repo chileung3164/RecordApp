@@ -14,6 +14,10 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
     @Published var shouldBlinkShockButtons: Bool = false
     @Published var shouldBlinkCPRButton: Bool = false
     @Published var shouldBlinkMedicationButtons: Bool = false
+    
+    // CPR Cycle Management
+    @Published var currentCPRCycle: Int = 0
+    @Published var cprCyclePhase: CPRCyclePhase = .waitingForShock
 
     private var timer: AnyCancellable?
     private var lastAdrenalineTime: Date?
@@ -28,6 +32,15 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
         case cprInProgress     // During CPR cycles
         case medicationPhase   // Focus on medications
         case reevaluation      // Check rhythm again
+        case cprCycleManagement // Managing 10 CPR cycles
+    }
+    
+    enum CPRCyclePhase {
+        case waitingForShock    // Red buttons should blink
+        case waitingForCPR      // Yellow CPR button should blink
+        case waitingForMedication // Specific medication button should blink
+        case cprActive          // CPR timer is running
+        case cycleComplete      // Cycle finished, prepare for next
     }
     
     enum RhythmType {
@@ -61,6 +74,10 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
         shouldBlinkShockButtons = false
         shouldBlinkCPRButton = false
         shouldBlinkMedicationButtons = false
+        
+        // Reset CPR cycle management
+        currentCPRCycle = 0
+        cprCyclePhase = .waitingForShock
         
         startTimer()
         showInitialGuidance()
@@ -102,6 +119,8 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
             checkCPRGuidance()
         case .medicationPhase:
             checkMedicationGuidance(currentTime: currentTime)
+        case .cprCycleManagement:
+            checkCPRCycleGuidance()
         default:
             break
         }
@@ -137,6 +156,39 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
                 phase: .reevaluation,
                 priority: .high
             )
+        }
+    }
+    
+    private func checkCPRCycleGuidance() {
+        // Provide guidance based on current CPR cycle phase
+        switch cprCyclePhase {
+        case .waitingForShock:
+            if currentGuideline == nil {
+                showGuideline(
+                    message: "CPR Cycle \(currentCPRCycle): Deliver shock first",
+                    phase: .cprCycleManagement,
+                    priority: .critical
+                )
+            }
+        case .waitingForCPR:
+            if currentGuideline == nil {
+                showGuideline(
+                    message: "CPR Cycle \(currentCPRCycle): Start CPR immediately",
+                    phase: .cprCycleManagement,
+                    priority: .critical
+                )
+            }
+        case .waitingForMedication:
+            if currentGuideline == nil {
+                let medicationMessage = getMedicationMessageForCycle(currentCPRCycle)
+                showGuideline(
+                    message: "CPR Cycle \(currentCPRCycle): \(medicationMessage)",
+                    phase: .cprCycleManagement,
+                    priority: .high
+                )
+            }
+        default:
+            break
         }
     }
     
@@ -224,6 +276,7 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
     
     func recordShockDelivered() {
         if currentPhase == .shockableRhythm {
+            // First shock - transition to CPR
             currentPhase = .postShock
             shouldBlinkShockButtons = false
             shouldBlinkCPRButton = true
@@ -234,7 +287,21 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
                 priority: .critical
             )
             
-            print("Shock delivered - transitioning to post-shock CPR")
+            print("First shock delivered - transitioning to post-shock CPR")
+        } else if currentPhase == .cprCycleManagement && cprCyclePhase == .waitingForShock {
+            // Shock delivered in CPR cycle - move to CPR phase
+            cprCyclePhase = .waitingForCPR
+            shouldBlinkShockButtons = false
+            shouldBlinkCPRButton = true
+            shouldBlinkMedicationButtons = false
+            
+            showGuideline(
+                message: "CPR Cycle \(currentCPRCycle): Shock delivered - Start CPR now",
+                phase: .cprCycleManagement,
+                priority: .critical
+            )
+            
+            print("CPR Cycle \(currentCPRCycle): Shock delivered - waiting for CPR")
         }
     }
     
@@ -251,6 +318,115 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
             )
             
             print("CPR started - focus on quality CPR and medications")
+        } else if currentPhase == .cprCycleManagement && cprCyclePhase == .waitingForCPR {
+            // CPR started in cycle management
+            cprCyclePhase = .cprActive
+            shouldBlinkCPRButton = false
+            
+            // Check if this cycle needs medication
+            if shouldCycleHaveMedication(currentCPRCycle) {
+                cprCyclePhase = .waitingForMedication
+                shouldBlinkMedicationButtons = true
+                
+                let medicationMessage = getMedicationMessageForCycle(currentCPRCycle)
+                showGuideline(
+                    message: "CPR Cycle \(currentCPRCycle): \(medicationMessage)",
+                    phase: .cprCycleManagement,
+                    priority: .high
+                )
+            } else {
+                shouldBlinkMedicationButtons = false
+                showGuideline(
+                    message: "CPR Cycle \(currentCPRCycle): CPR in progress - No medication needed this cycle",
+                    phase: .cprCycleManagement,
+                    priority: .medium
+                )
+            }
+            
+            print("CPR Cycle \(currentCPRCycle): CPR started")
+        }
+    }
+    
+    func recordCPRCycleCompleted() {
+        if currentPhase == .cprCycleManagement {
+            currentCPRCycle += 1
+            
+            if currentCPRCycle <= 10 {
+                // Start next CPR cycle
+                cprCyclePhase = .waitingForShock
+                shouldBlinkShockButtons = true
+                shouldBlinkCPRButton = false
+                shouldBlinkMedicationButtons = false
+                
+                showGuideline(
+                    message: "Starting CPR Cycle \(currentCPRCycle) - Check rhythm and deliver shock",
+                    phase: .cprCycleManagement,
+                    priority: .critical
+                )
+                
+                print("Starting CPR Cycle \(currentCPRCycle)")
+            } else {
+                // All 10 cycles completed
+                showGuideline(
+                    message: "All 10 CPR cycles completed - Reassess patient condition",
+                    phase: .reevaluation,
+                    priority: .critical
+                )
+                
+                print("All 10 CPR cycles completed")
+            }
+        }
+    }
+    
+    func recordFirstCPRCycleCompleted() {
+        // Transition from initial CPR to cycle management
+        currentPhase = .cprCycleManagement
+        currentCPRCycle = 2 // Starting cycle 2
+        cprCyclePhase = .waitingForShock
+        
+        shouldBlinkShockButtons = true
+        shouldBlinkCPRButton = false
+        shouldBlinkMedicationButtons = false
+        
+        showGuideline(
+            message: "Starting CPR Cycle 2 - Check rhythm and deliver shock",
+            phase: .cprCycleManagement,
+            priority: .critical
+        )
+        
+        print("First CPR cycle completed - Starting CPR Cycle 2")
+    }
+    
+    private func shouldCycleHaveMedication(_ cycle: Int) -> Bool {
+        switch cycle {
+        case 2, 4, 6, 8, 10: return true  // Adrenaline cycles
+        case 3, 5: return true            // Amiodarone cycles
+        case 7, 9: return false           // No medication cycles
+        default: return false
+        }
+    }
+    
+    private func getMedicationMessageForCycle(_ cycle: Int) -> String {
+        switch cycle {
+        case 2, 4, 6, 8, 10: return "Administer Adrenaline"
+        case 3: return "Administer Amiodarone 300mg (1st dose)"
+        case 5: return "Administer Amiodarone 150mg (2nd dose)"
+        default: return "No medication needed this cycle"
+        }
+    }
+    
+    func recordMedicationGiven(medication: String) {
+        if currentPhase == .cprCycleManagement && cprCyclePhase == .waitingForMedication {
+            cprCyclePhase = .cprActive
+            shouldBlinkMedicationButtons = false
+            
+            showGuideline(
+                message: "CPR Cycle \(currentCPRCycle): \(medication) administered - Continue CPR",
+                phase: .cprCycleManagement,
+                priority: .medium
+            )
+            
+            print("CPR Cycle \(currentCPRCycle): \(medication) administered")
         }
     }
 
@@ -258,14 +434,13 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
         lastAdrenalineTime = Date()
         print("Adrenaline recorded")
         
-        if currentPhase == .medicationPhase || currentPhase == .cprInProgress {
-            showGuideline(
-                message: "Adrenaline administered - Continue CPR",
-                phase: .cprInProgress,
-                priority: .medium
-            )
-        }
-        
+        recordMedicationGiven(medication: "Adrenaline")
+        dismissCurrentGuideline()
+    }
+    
+    func recordAmiodarone() {
+        print("Amiodarone recorded")
+        recordMedicationGiven(medication: "Amiodarone")
         dismissCurrentGuideline()
     }
     
@@ -336,10 +511,26 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
             return shouldBlinkCPRButton
         case .medication:
             return shouldBlinkMedicationButtons
+        case .adrenaline:
+            return shouldBlinkMedicationButtons && shouldCycleNeedAdrenaline()
+        case .amiodarone:
+            return shouldBlinkMedicationButtons && shouldCycleNeedAmiodarone()
         }
     }
     
+    private func shouldCycleNeedAdrenaline() -> Bool {
+        return currentPhase == .cprCycleManagement && 
+               cprCyclePhase == .waitingForMedication &&
+               [2, 4, 6, 8, 10].contains(currentCPRCycle)
+    }
+    
+    private func shouldCycleNeedAmiodarone() -> Bool {
+        return currentPhase == .cprCycleManagement && 
+               cprCyclePhase == .waitingForMedication &&
+               [3, 5].contains(currentCPRCycle)
+    }
+    
     enum ButtonType {
-        case rhythm, shock, cpr, medication
+        case rhythm, shock, cpr, medication, adrenaline, amiodarone
     }
 }
