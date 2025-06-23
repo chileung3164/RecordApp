@@ -47,6 +47,11 @@ struct StartView: View {
             .sheet(isPresented: $isShowingInfo) {
                 InfoView()
             }
+            
+            Text("Copyright ©️ 2025 QEH MDSSC. All Rights Reserved.")
+                .font(.footnote)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
         }
         .padding()
     }
