@@ -153,6 +153,17 @@ struct FunctionalButtonView: View {
             
             Spacer()
             
+            // End Button
+            Button("End") {
+                showEndConfirmation = true
+            }
+            .font(.system(size: geometry.size.width * 0.02, weight: .bold))
+            .foregroundColor(.white)
+            .padding(.horizontal, geometry.size.width * 0.02)
+            .padding(.vertical, geometry.size.height * 0.01)
+            .background(Color.red)
+            .cornerRadius(geometry.size.width * 0.01)
+            
             // Patient Outcome
             VStack(spacing: geometry.size.height * 0.008) {
                 Text("Patient Outcome")
