@@ -1,8 +1,8 @@
 import SwiftUI
 
-struct ResuscitationEvent: Identifiable {
+struct ResuscitationEvent: Identifiable, Codable {
     let id = UUID()
-    enum EventType {
+    enum EventType: Codable {
         case ecgRhythm(String)
         case medication(String)
         case defibrillation
@@ -13,12 +13,37 @@ struct ResuscitationEvent: Identifiable {
     let timestamp: Date
 }
 
+// New struct for complete resuscitation records
+struct ResuscitationRecord: Identifiable, Codable {
+    let id = UUID()
+    let sessionID: UUID
+    let startTime: Date
+    let endTime: Date?
+    let events: [ResuscitationEvent]
+    let patientOutcome: String
+    let totalDuration: TimeInterval
+    
+    var medicationCounts: [String: Int] {
+        var counts: [String: Int] = [:]
+        for event in events {
+            if case .medication(let medication) = event.type {
+                counts[medication, default: 0] += 1
+            }
+        }
+        return counts
+    }
+}
+
+
+
 class ResuscitationManager: ObservableObject {
     @Published var isResuscitationStarted = false
     @Published var resuscitationStartTime: Date?
     @Published var events: [ResuscitationEvent] = []
     @Published var currentAlert: String?
     @Published var shouldShowAlert = false
+    @Published var currentSessionID = UUID()
+    @Published var patientOutcome: String = ""
     
     private var protocolManager = CPRProtocolManager()
     private var timer: Timer?
@@ -38,6 +63,9 @@ class ResuscitationManager: ObservableObject {
         isResuscitationStarted = true
         resuscitationStartTime = Date()
         currentInterval = 0
+        currentSessionID = UUID()
+        patientOutcome = ""
+        events = []
         startProtocolTimer()
     }
     
@@ -49,6 +77,7 @@ class ResuscitationManager: ObservableObject {
         resuscitationStartTime = nil
         currentAlert = nil
         shouldShowAlert = false
+        self.patientOutcome = ""
     }
     func performDefibrillation() {
            events.append(ResuscitationEvent(type: .defibrillation, timestamp: Date()))

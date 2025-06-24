@@ -3,6 +3,7 @@ import AVFoundation
 
 struct FunctionalButtonView: View {
     @EnvironmentObject var resuscitationManager: ResuscitationManager
+    @EnvironmentObject var recordManager: RecordManager
     @StateObject private var guidelineSystem = SmartResuscitationGuidelineSystem()
     @State private var showEndConfirmation = false
     @State private var showPostCareAlert = false
@@ -152,6 +153,17 @@ struct FunctionalButtonView: View {
             .opacity(cprTimer != nil ? 1.0 : 0.3) // Only visible when CPR active
             
             Spacer()
+            
+            // End Button - positioned on the right side
+            Button("End") {
+                showEndConfirmation = true
+            }
+            .font(.system(size: geometry.size.width * 0.018, weight: .bold))
+            .foregroundColor(.white)
+            .padding(.horizontal, geometry.size.width * 0.015)
+            .padding(.vertical, geometry.size.height * 0.008)
+            .background(Color.red)
+            .cornerRadius(geometry.size.width * 0.015)
             
             // Patient Outcome
             VStack(spacing: geometry.size.height * 0.008) {
@@ -542,8 +554,116 @@ struct FunctionalButtonView: View {
     private func endResuscitation() {
         guidelineSystem.stopGuideline()
         stopAllTimers()
+        
+        // Determine patient outcome based on current state
+        let outcome: String
+        switch patientOutcome {
+        case .alive:
+            outcome = "Alive"
+        case .death:
+            outcome = "Death"
+        case .none:
+            outcome = "Not specified"
+        }
+        
+        // Save comprehensive clinical record
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        
+        let detailFormatter = DateFormatter()
+        detailFormatter.dateFormat = "HH:mm:ss"
+        
+        let startTimeText = resuscitationManager.resuscitationStartTime.map { 
+            formatter.string(from: $0) 
+        } ?? "Unknown"
+        
+        let endTimeText = formatter.string(from: Date())
+        let duration = resuscitationManager.resuscitationStartTime.map { 
+            Date().timeIntervalSince($0) 
+        } ?? 0
+        
+        let durationText = String(format: "%.0f minutes", duration / 60)
+        
+        // Build detailed event log
+        var eventLog = ""
+        if !resuscitationManager.events.isEmpty {
+            eventLog = "\n\n=== DETAILED EVENT LOG ===\n"
+            for (index, event) in resuscitationManager.events.enumerated() {
+                let eventTime = detailFormatter.string(from: event.timestamp)
+                let eventDescription = formatEventForClinical(event)
+                eventLog += "\n[\(eventTime)] \(eventDescription)"
+            }
+        }
+        
+        // Calculate medication summary
+        var medicationSummary = ""
+        var medicationCounts: [String: Int] = [:]
+        for event in resuscitationManager.events {
+            if case .medication(let medication) = event.type {
+                medicationCounts[medication, default: 0] += 1
+            }
+        }
+        
+        if !medicationCounts.isEmpty {
+            medicationSummary = "\n\n=== MEDICATION SUMMARY ===\n"
+            for (medication, count) in medicationCounts.sorted(by: { $0.key < $1.key }) {
+                medicationSummary += "\n• \(medication): \(count) dose(s)"
+            }
+        }
+        
+        let recordText = """
+        === RESUSCITATION RECORD ===
+        
+        Session Started: \(startTimeText)
+        Session Ended: \(endTimeText)
+        Total Duration: \(durationText)
+        Patient Outcome: \(outcome)
+        Total Events: \(resuscitationManager.events.count)
+        
+        === SESSION SUMMARY ===
+        • ECG Rhythms Recorded: \(countEvents(of: .ecgRhythm(""), in: resuscitationManager.events))
+        • Defibrillations: \(countEvents(of: .defibrillation, in: resuscitationManager.events))
+        • Medications Given: \(countEvents(of: .medication(""), in: resuscitationManager.events))
+        • Protocol Alerts: \(countEvents(of: .alert(""), in: resuscitationManager.events))
+        \(medicationSummary)\(eventLog)
+        
+        === END OF RECORD ===
+        """
+        
+        recordManager.saveRecord(recordText)
+        
         resuscitationManager.endResuscitation()
-        resuscitationManager.isResuscitationStarted = false
+    }
+    
+    private func formatEventForClinical(_ event: ResuscitationEvent) -> String {
+        switch event.type {
+        case .ecgRhythm(let rhythm):
+            return "ECG RHYTHM: \(rhythm)"
+        case .medication(let medication):
+            return "MEDICATION: \(medication) administered"
+        case .defibrillation:
+            return "DEFIBRILLATION: Biphasic shock delivered"
+        case .alert(let message):
+            return "PROTOCOL ALERT: \(message)"
+        }
+    }
+    
+    private func countEvents(of type: ResuscitationEvent.EventType, in events: [ResuscitationEvent]) -> Int {
+        return events.filter { event in
+            switch (event.type, type) {
+            case (.ecgRhythm(_), .ecgRhythm(_)):
+                return true
+            case (.medication(_), .medication(_)):
+                return true
+            case (.defibrillation, .defibrillation):
+                return true
+            case (.alert(_), .alert(_)):
+                return true
+            default:
+                return false
+            }
+        }.count
     }
     
     private func setupAudioPlayer() {
