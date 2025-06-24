@@ -93,6 +93,8 @@ struct FunctionalButtonView: View {
             guidelineSystem.startGuideline()
             setupAudioPlayer()
             startStopwatch()
+            // Reset medication button states before starting blinking
+            resetMedicationButtonStates()
             // Start integrated blinking system
             startIntegratedBlinking()
         }
@@ -398,10 +400,6 @@ struct FunctionalButtonView: View {
             }
         }
         .padding(.horizontal, geometry.size.width * 0.012)
-        .onAppear {
-            startAdrenalineBlinkingIfNeeded()
-            startAmiodaroneBlinkingIfNeeded()
-        }
     }
     
     private func otherEventsSection(geometry: GeometryProxy) -> some View {
@@ -603,24 +601,38 @@ struct FunctionalButtonView: View {
             }
         }
         
-        // Add medication button blinking
+        // Add medication button blinking with debug logging
         adrenalineBlinkTimer?.invalidate()
         adrenalineBlinkTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { _ in
-            if self.guidelineSystem.shouldBlinkButton(type: .adrenaline) {
-                self.showAdrenaline.toggle()
-            } else {
-                self.showAdrenaline = true
+            DispatchQueue.main.async {
+                let shouldBlink = self.guidelineSystem.shouldBlinkButton(type: .adrenaline)
+                if shouldBlink {
+                    self.showAdrenaline.toggle()
+                    print("DEBUG: Adrenaline button blinking - showAdrenaline: \(self.showAdrenaline)")
+                } else {
+                    self.showAdrenaline = true
+                }
             }
         }
+        // Ensure timer runs on main runloop
+        RunLoop.main.add(adrenalineBlinkTimer!, forMode: .common)
         
         amiodaroneBlinkTimer?.invalidate()
         amiodaroneBlinkTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { _ in
-            if self.guidelineSystem.shouldBlinkButton(type: .amiodarone) {
-                self.showAmiodarone.toggle()
-            } else {
-                self.showAmiodarone = true
+            DispatchQueue.main.async {
+                let shouldBlink = self.guidelineSystem.shouldBlinkButton(type: .amiodarone)
+                if shouldBlink {
+                    self.showAmiodarone.toggle()
+                    print("DEBUG: Amiodarone button blinking - showAmiodarone: \(self.showAmiodarone)")
+                } else {
+                    self.showAmiodarone = true
+                }
             }
         }
+        // Ensure timer runs on main runloop
+        RunLoop.main.add(amiodaroneBlinkTimer!, forMode: .common)
+        
+        print("DEBUG: Integrated blinking system started")
     }
     
     private func stopAllBlinking() {
@@ -638,6 +650,16 @@ struct FunctionalButtonView: View {
         showAdrenaline = true
         showAmiodarone = true
         showOutcome = true
+        
+        print("DEBUG: All blinking stopped and states reset")
+    }
+    
+    private func resetMedicationButtonStates() {
+        showAdrenaline = true
+        showAmiodarone = true
+        blinkAdrenaline = false
+        blinkAmiodarone = false
+        print("DEBUG: Medication button states reset")
     }
     
     private func startOutcomeBlinkingIfNeeded() {
