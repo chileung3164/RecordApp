@@ -3,6 +3,8 @@ import AVFoundation
 
 struct FunctionalButtonView: View {
     @EnvironmentObject var resuscitationManager: ResuscitationManager
+    var onEndResuscitation: (() -> Void)? = nil
+    var showFastForward: Bool = true
     @StateObject private var guidelineSystem = SmartResuscitationGuidelineSystem()
     @State private var showEndConfirmation = false
     @State private var showPostCareAlert = false
@@ -131,25 +133,27 @@ struct FunctionalButtonView: View {
             .background(Color.brown.opacity(0.15))
             .cornerRadius(geometry.size.width * 0.012)
             
-            // Fast Forward Button for debugging - separate from main timer
-            Button(action: {
-                if cprTimer != nil { // Only work when CPR is active
-                    cprCounter = min(cprCounter + 30, 120) // Add 30s, max 120s
+            // Fast Forward Button for debugging - separate from main timer (only for instructor mode)
+            if showFastForward {
+                Button(action: {
+                    if cprTimer != nil { // Only work when CPR is active
+                        cprCounter = min(cprCounter + 30, 120) // Add 30s, max 120s
+                    }
+                }) {
+                    Text("+30s")
+                        .font(.system(size: geometry.size.width * 0.018, weight: .bold))
+                        .foregroundColor(.red)
+                        .padding(.horizontal, geometry.size.width * 0.008)
+                        .padding(.vertical, geometry.size.height * 0.004)
+                        .background(Color.white.opacity(0.9))
+                        .cornerRadius(geometry.size.width * 0.008)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: geometry.size.width * 0.008)
+                                .stroke(Color.red.opacity(0.3), lineWidth: 1)
+                        )
                 }
-            }) {
-                Text("+30s")
-                    .font(.system(size: geometry.size.width * 0.018, weight: .bold))
-                    .foregroundColor(.red)
-                    .padding(.horizontal, geometry.size.width * 0.008)
-                    .padding(.vertical, geometry.size.height * 0.004)
-                    .background(Color.white.opacity(0.9))
-                    .cornerRadius(geometry.size.width * 0.008)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: geometry.size.width * 0.008)
-                            .stroke(Color.red.opacity(0.3), lineWidth: 1)
-                    )
+                .opacity(cprTimer != nil ? 1.0 : 0.3) // Only visible when CPR active
             }
-            .opacity(cprTimer != nil ? 1.0 : 0.3) // Only visible when CPR active
             
             Spacer()
             
@@ -234,20 +238,22 @@ struct FunctionalButtonView: View {
                     showPostCareAlert = true
                     print("Debug: ROSC button tapped, starting ROSC timer")
                 }
-                .onLongPressGesture(minimumDuration: 3.0) {
-                    // Debug feature: Add 20 minutes to ROSC time when long pressed
-                    print("Debug: ROSC Long press detected!")
-                    print("Debug: isROSCAchieved = \(isROSCAchieved), isROSCActive = \(isROSCActive)")
-                    print("Debug: Current roscTime = \(roscTime)")
-                    
-                    // Add 20 minutes regardless of state for debugging
-                    roscTime += 1200  // Add 20 minutes (1200 seconds)
-                    print("Debug: Added 20 minutes to ROSC time, new time = \(roscTime)")
-                    
-                    // Start ROSC timer if not already running
-                    if !isROSCActive {
-                        startROSCStopwatch()
-                        print("Debug: Started ROSC timer")
+                // Debug feature: Add 20 minutes to ROSC time when long pressed (instructor mode only)
+                .onLongPressGesture(minimumDuration: showFastForward ? 3.0 : 999999) {
+                    if showFastForward {
+                        print("Debug: ROSC Long press detected!")
+                        print("Debug: isROSCAchieved = \(isROSCAchieved), isROSCActive = \(isROSCActive)")
+                        print("Debug: Current roscTime = \(roscTime)")
+                        
+                        // Add 20 minutes regardless of state for debugging
+                        roscTime += 1200  // Add 20 minutes (1200 seconds)
+                        print("Debug: Added 20 minutes to ROSC time, new time = \(roscTime)")
+                        
+                        // Start ROSC timer if not already running
+                        if !isROSCActive {
+                            startROSCStopwatch()
+                            print("Debug: Started ROSC timer")
+                        }
                     }
                 }
             }
@@ -555,6 +561,7 @@ struct FunctionalButtonView: View {
         stopAllTimers()
         resuscitationManager.endResuscitation()
         resuscitationManager.isResuscitationStarted = false
+        onEndResuscitation?()
     }
     
     private func setupAudioPlayer() {
