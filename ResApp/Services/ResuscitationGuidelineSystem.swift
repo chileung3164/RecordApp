@@ -1,7 +1,7 @@
 import SwiftUI
 import Combine
 
-class SmartResuscitationGuidelineSystem: ObservableObject {
+class SmartResuscitationGuidelineSystem: ObservableObject, GuidelineSystemProtocol {
     @Published var currentGuideline: ResuscitationGuideline?
     @Published var showGuideline: Bool = false
     @Published var elapsedTime: TimeInterval = 0
@@ -24,41 +24,9 @@ class SmartResuscitationGuidelineSystem: ObservableObject {
     private var currentECGRhythm: String = ""
     private var lastGuidlineDismissalTime: Date?
 
-    enum ResuscitationPhase {
-        case rhythmSelection    // Initial phase - user selects pVT/VF or PEA/AS
-        case shockableRhythm   // pVT/VF selected - all red buttons should blink
-        case nonShockableRhythm // PEA/AS selected - CPR and medication focus
-        case postShock         // After shock delivery
-        case cprInProgress     // During CPR cycles
-        case medicationPhase   // Focus on medications
-        case reevaluation      // Check rhythm again
-        case cprCycleManagement // Managing 10 CPR cycles
-    }
-    
-    enum CPRCyclePhase {
-        case waitingForShock    // Red buttons should blink
-        case waitingForCPR      // Yellow CPR button should blink
-        case waitingForMedication // Specific medication button should blink
-        case cprActive          // CPR timer is running
-        case cycleComplete      // Cycle finished, prepare for next
-    }
-    
-    enum RhythmType {
-        case shockable      // pVT/VF
-        case nonShockable   // PEA/AS
-        case rosc           // Return of Spontaneous Circulation
-    }
+    // Note: ResuscitationPhase, CPRCyclePhase, and RhythmType are now imported from ResuscitationModels.swift
 
-    struct ResuscitationGuideline: Identifiable {
-        let id = UUID()
-        let message: String
-        let phase: ResuscitationPhase
-        let priority: GuidancePriority
-        
-        enum GuidancePriority {
-            case critical, high, medium, low
-        }
-    }
+
 
     func startGuideline() {
         stopTimer()

@@ -54,27 +54,53 @@ struct ResuscitationSummaryView: View {
     
     private func eventIcon(for event: ResuscitationEvent) -> some View {
         switch event.type {
-        case .ecgRhythm:
+        case .checkRhythm:
             return Image(systemName: "waveform.path.ecg")
         case .medication:
             return Image(systemName: "pill.fill")
-        case .defibrillation:
+        case .shockDelivered:
             return Image(systemName: "bolt.heart.fill")
+        case .patientOutcomeAlive:
+            return Image(systemName: "person.fill.checkmark")
+        case .patientOutcomeDeath:
+            return Image(systemName: "person.fill.xmark")
         case .alert:
             return Image(systemName: "exclamationmark.triangle.fill")
+        default:
+            return Image(systemName: "circle.fill")
         }
     }
     
     private func eventDescription(_ event: ResuscitationEvent) -> String {
         switch event.type {
-        case .ecgRhythm(let rhythm):
-            return "ECG Rhythm: \(rhythm)"
+        case .startCPR:
+            return "Start CPR"
+        case .checkRhythm(let rhythm):
+            return "Checked rhythm - \(rhythm)"
+        case .shockDelivered(let joules):
+            return "Shock \(joules)J"
+        case .cprCycle(let duration):
+            return "CPR (Duration: \(duration))"
+        case .adrenalineFirst:
+            return "Adrenaline 1st"
+        case .adrenalineSecond:
+            return "Adrenaline 2nd"
+        case .adrenalineSubsequent(let doseNumber, let timeSinceLastDose):
+            return "Adrenaline \(doseNumber)th (\(timeSinceLastDose) from last dose)"
+        case .amiodarone(let doseNumber):
+            return "Amiodarone \(doseNumber)th dose"
+        case .startROSC:
+            return "Start ROSC"
+        case .patientOutcomeAlive:
+            return "Patient Outcome: ALIVE"
+        case .patientOutcomeDeath:
+            return "Patient Outcome: DEATH"
         case .medication(let medication):
             return "Medication: \(medication)"
-        case .defibrillation:
-            return "Defibrillation performed"
         case .alert(let message):
             return "Alert: \(message)"
+        case .other(let description):
+            return description
         }
     }
     

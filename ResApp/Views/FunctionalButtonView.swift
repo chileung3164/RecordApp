@@ -33,8 +33,7 @@ struct FunctionalButtonView: View {
     @State private var blinkOutcome = false
     @State private var showOutcome = true
     @State private var outcomeBlinkTimer: Timer? = nil
-    @State private var elapsedTime: TimeInterval = 0
-    @State private var stopwatchTimer: Timer? = nil
+    // Main timer now managed by ResuscitationManager
     @State private var roscTime: TimeInterval = 0
     @State private var roscTimer: Timer? = nil
     @State private var isROSCActive = false
@@ -94,7 +93,7 @@ struct FunctionalButtonView: View {
         .onAppear {
             guidelineSystem.startGuideline()
             setupAudioPlayer()
-            startStopwatch()
+            // Main timer is now automatically managed by ResuscitationManager
             // Reset medication button states before starting blinking
             resetMedicationButtonStates()
             // Start integrated blinking system
@@ -136,8 +135,15 @@ struct FunctionalButtonView: View {
             // Fast Forward Button for debugging - separate from main timer (only for instructor mode)
             if showFastForward {
                 Button(action: {
-                    if cprTimer != nil { // Only work when CPR is active
+                    // Fast forward the entire system by 30 seconds
+                    resuscitationManager.fastForward(by: 30)
+                    // Also advance CPR timer if active
+                    if cprTimer != nil {
                         cprCounter = min(cprCounter + 30, 120) // Add 30s, max 120s
+                    }
+                    // Also advance ROSC timer if active
+                    if isROSCActive {
+                        roscTime += 30
                     }
                 }) {
                     Text("+30s")
@@ -177,8 +183,8 @@ struct FunctionalButtonView: View {
                 HStack(spacing: geometry.size.width * 0.012) {
                     Button("ALIVE") {
                         patientOutcome = .alive
+                        resuscitationManager.events.append(ResuscitationEvent(type: .patientOutcomeAlive, timestamp: resuscitationManager.getCurrentTimestamp()))
                         stopOutcomeBlinking()
-                        resetStopwatch()
                     }
                     .buttonStyle(OutcomeButtonStyle(isSelected: patientOutcome == .alive, color: .green, geometry: geometry))
                     .opacity(showOutcome ? 1.0 : 0.2)
@@ -186,8 +192,8 @@ struct FunctionalButtonView: View {
                     
                     Button("DEATH") {
                         patientOutcome = .death
+                        resuscitationManager.events.append(ResuscitationEvent(type: .patientOutcomeDeath, timestamp: resuscitationManager.getCurrentTimestamp()))
                         stopOutcomeBlinking()
-                        resetStopwatch()
                     }
                     .buttonStyle(OutcomeButtonStyle(isSelected: patientOutcome == .death, color: .red, geometry: geometry))
                     .opacity(showOutcome ? 1.0 : 0.2)
@@ -245,9 +251,10 @@ struct FunctionalButtonView: View {
                         print("Debug: isROSCAchieved = \(isROSCAchieved), isROSCActive = \(isROSCActive)")
                         print("Debug: Current roscTime = \(roscTime)")
                         
-                        // Add 20 minutes regardless of state for debugging
-                        roscTime += 1200  // Add 20 minutes (1200 seconds)
-                        print("Debug: Added 20 minutes to ROSC time, new time = \(roscTime)")
+                        // Fast forward the entire system by 20 minutes (1200 seconds)
+                        resuscitationManager.fastForward(by: 1200)
+                        roscTime += 1200  // Also advance ROSC timer
+                        print("Debug: Added 20 minutes to all timers, new roscTime = \(roscTime)")
                         
                         // Start ROSC timer if not already running
                         if !isROSCActive {
@@ -291,13 +298,13 @@ struct FunctionalButtonView: View {
                     ForEach([100, 150, 200, 240], id: \ .self) { energy in
                         EnergyButton(energy: energy, type: "Biphasic", isSelected: selectedEnergy == energy, geometry: geometry, faded: selectedEnergy != energy && selectedEnergy > 0, opacity: (guidelineSystem.shouldBlinkButton(type: .shock) && showEnergy) ? 1.0 : 0.3) {
                             selectedEnergy = energy
-                            recordEvent("Defibrillation: Biphasic \(energy)J")
+                            resuscitationManager.events.append(ResuscitationEvent(type: .shockDelivered(energy), timestamp: resuscitationManager.getCurrentTimestamp()))
                             guidelineSystem.recordShockDelivered()
                         }
                     }
                     EnergyButton(energy: 360, type: "Monophasic", isSelected: selectedEnergy == 360, geometry: geometry, faded: selectedEnergy != 360 && selectedEnergy > 0, opacity: (guidelineSystem.shouldBlinkButton(type: .shock) && showEnergy) ? 1.0 : 0.3) {
                         selectedEnergy = 360
-                        recordEvent("Defibrillation: Monophasic 360J")
+                        resuscitationManager.events.append(ResuscitationEvent(type: .shockDelivered(360), timestamp: resuscitationManager.getCurrentTimestamp()))
                         guidelineSystem.recordShockDelivered()
                     }
                 }
@@ -450,8 +457,9 @@ struct FunctionalButtonView: View {
     // MARK: - Helper Functions
     
     private var formattedElapsedTime: String {
-        let minutes = Int(elapsedTime) / 60
-        let seconds = Int(elapsedTime) % 60
+        let totalElapsed = resuscitationManager.getElapsedTime()
+        let minutes = Int(totalElapsed) / 60
+        let seconds = Int(totalElapsed) % 60
         return String(format: "%02d'%02d\"", minutes, seconds)
     }
     
@@ -479,10 +487,10 @@ struct FunctionalButtonView: View {
     private func recordECGRhythm(_ rhythm: String) {
         // If CPR is running, record CPR event with duration
         if cprCounter > 0 {
-            let isFirst = resuscitationManager.events.first { if case .ecgRhythm(let r) = $0.type { return r == "CPR" } else { return false } } == nil
+            let isFirst = resuscitationManager.events.first { if case .cprCycle(let _) = $0.type { return true } else { return false } } == nil
             let duration = formattedCPRTime
             let label = isFirst ? "CPR 1st (Duration: \(duration))" : "CPR (Duration: \(duration))"
-            resuscitationManager.events.append(ResuscitationEvent(type: .ecgRhythm(label), timestamp: Date()))
+            resuscitationManager.events.append(ResuscitationEvent(type: .cprCycle(duration: duration), timestamp: resuscitationManager.getCurrentTimestamp()))
             stopCPRTimer()
             cprCounter = 0
         }
@@ -492,7 +500,7 @@ struct FunctionalButtonView: View {
         } else if rhythm == "pVT/VF" || rhythm == "PEA/AS" {
             resetROSCStopwatch()
         }
-        resuscitationManager.events.append(ResuscitationEvent(type: .ecgRhythm(rhythm), timestamp: Date()))
+        resuscitationManager.events.append(ResuscitationEvent(type: .checkRhythm(rhythm), timestamp: resuscitationManager.getCurrentTimestamp()))
         guidelineSystem.recordECGRhythm(rhythm)
         if rhythm == "ROSC" {
             stopAllTimers()
@@ -502,11 +510,11 @@ struct FunctionalButtonView: View {
     }
     
     private func recordMedication(_ medication: String) {
-        resuscitationManager.events.append(ResuscitationEvent(type: .medication(medication), timestamp: Date()))
+        resuscitationManager.events.append(ResuscitationEvent(type: .medication(medication), timestamp: resuscitationManager.getCurrentTimestamp()))
     }
     
     private func recordEvent(_ event: String) {
-        resuscitationManager.events.append(ResuscitationEvent(type: .alert(event), timestamp: Date()))
+        resuscitationManager.events.append(ResuscitationEvent(type: .alert(event), timestamp: resuscitationManager.getCurrentTimestamp()))
     }
     
     private func startCPRTimer() {
@@ -710,17 +718,7 @@ struct FunctionalButtonView: View {
         cprTimer = nil
     }
     
-    private func startStopwatch() {
-        stopwatchTimer?.invalidate()
-        stopwatchTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            elapsedTime += 1
-        }
-    }
-    
-    private func resetStopwatch() {
-        stopwatchTimer?.invalidate()
-        elapsedTime = 0
-    }
+    // Main timer functions removed - now handled by ResuscitationManager
     
     private func startROSCStopwatch() {
         isROSCActive = true
@@ -796,27 +794,6 @@ struct FunctionalButtonView: View {
 }
 
 // MARK: - Custom Button Styles
-
-struct OutcomeButtonStyle: ButtonStyle {
-    let isSelected: Bool
-    let color: Color
-    let geometry: GeometryProxy
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.system(size: geometry.size.width * 0.020, weight: .bold))
-            .foregroundColor(isSelected ? .white : color)
-            .padding(.horizontal, geometry.size.width * 0.025)
-            .padding(.vertical, geometry.size.height * 0.01)
-            .background(isSelected ? color : Color.clear)
-            .overlay(
-                RoundedRectangle(cornerRadius: geometry.size.width * 0.015)
-                    .stroke(color, lineWidth: 2.5)
-            )
-            .cornerRadius(geometry.size.width * 0.015)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-    }
-}
 
 struct EventButtonStyle: ButtonStyle {
     let geometry: GeometryProxy
@@ -936,131 +913,7 @@ struct MedicationButtonView: View {
     }
 }
 
-struct ResuscitationRecordView: View {
-    @EnvironmentObject var resuscitationManager: ResuscitationManager
-    
-    var body: some View {
-        GeometryReader { geometry in
-            VStack(alignment: .leading, spacing: 0) {
-                Text("RESUSCITATION RECORD")
-                    .font(.system(size: geometry.size.width * 0.065, weight: .bold))
-                    .padding(.horizontal, geometry.size.width * 0.06)
-                    .padding(.vertical, geometry.size.height * 0.018)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.gray.opacity(0.2))
-                
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: geometry.size.height * 0.01) {
-                        ForEach(resuscitationManager.events.reversed()) { event in
-                            EventRowView(event: event, geometry: geometry)
-                        }
-                    }
-                    .padding(.horizontal, geometry.size.width * 0.05)
-                    .padding(.top, geometry.size.height * 0.015)
-                }
-            }
-        }
-        .background(Color.white)
-    }
-}
 
-struct EventRowView: View {
-    let event: ResuscitationEvent
-    let geometry: GeometryProxy
-    @EnvironmentObject var resuscitationManager: ResuscitationManager
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: geometry.size.height * 0.006) {
-            HStack {
-                Text(eventTitle)
-                    .font(.system(size: geometry.size.width * 0.055, weight: .semibold))
-                    .italic(shouldItalicize)
-                Spacer()
-                Text(timeFormatter.string(from: event.timestamp))
-                    .font(.system(size: geometry.size.width * 0.045, weight: .medium))
-                    .foregroundColor(.secondary)
-            }
-            
-            if let subtitle = eventSubtitle {
-                Text(subtitle)
-                    .font(.system(size: geometry.size.width * 0.045, weight: .regular))
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding(.vertical, geometry.size.height * 0.01)
-        .padding(.horizontal, geometry.size.width * 0.04)
-        .background(Color.gray.opacity(0.08))
-        .cornerRadius(geometry.size.width * 0.025)
-    }
-    
-    private var eventTitle: String {
-        switch event.type {
-        case .ecgRhythm(let rhythm):
-            return "ECG: \(rhythm)"
-        case .medication(let med):
-            return "Med: \(med)"
-        case .defibrillation:
-            return "Defibrillation"
-        case .alert(let alert):
-            return alert
-        }
-    }
-    
-    private var eventSubtitle: String? {
-        switch event.type {
-        case .defibrillation:
-            return "Energy delivered"
-        default:
-            return nil
-        }
-    }
-    
-    private let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        return formatter
-    }()
-    
-    private var shouldItalicize: Bool {
-        let events = resuscitationManager.events
-        guard let idx = events.firstIndex(where: { $0.id == event.id }) else { return false }
-        switch event.type {
-        case .ecgRhythm(let rhythm):
-            if rhythm == "CPR" {
-                if idx == 0 { return false }
-                let prev = events[idx-1]
-                if case .ecgRhythm(let prevRhythm) = prev.type, prevRhythm == "pVT/VF" {
-                    // correct
-                } else {
-                    return true
-                }
-            }
-            return false
-        case .medication(let med):
-            if med.contains("Adrenaline") {
-                let prev = events[..<idx].last { if case .medication(let m) = $0.type { return m.contains("Adrenaline") } else { return false } }
-                if let prev = prev {
-                    let interval = event.timestamp.timeIntervalSince(prev.timestamp)
-                    if interval < 180 || interval > 300 { return true }
-                }
-            }
-            if med.contains("Amiodarone") || med.contains("Lidocaine") {
-                let count = events[...idx].filter { if case .medication(let m) = $0.type { return m.contains("Amiodarone") || m.contains("Lidocaine") } else { return false } }.count
-                if count > 2 { return true }
-            }
-            return false
-        case .defibrillation:
-            if idx == 0 { return true }
-            let prev = events[idx-1]
-            if case .ecgRhythm(let prevRhythm) = prev.type, prevRhythm == "pVT/VF" {
-                return false
-            }
-            return true
-        case .alert:
-            return false
-        }
-    }
-}
 
 struct MedicationPickerSheet: View {
     let medications = [

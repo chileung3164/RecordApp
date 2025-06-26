@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct CPRProtocolManager {
+struct CPRProtocolManager: CPRProtocolManagerProtocol {
     let intervalDuration: TimeInterval = 120 // 2 minutes in seconds
     let totalIntervals = 9
     

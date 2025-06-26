@@ -20,6 +20,19 @@
 		91C80FE92C636BC600E87A87 /* ResuscitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */; };
 		91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */; };
 		91DB0F162C7F2CFB005E85DE /* buzzer.wav in Resources */ = {isa = PBXBuildFile; fileRef = 91DB0F152C7F2CFB005E85DE /* buzzer.wav */; };
+		92NEW0012C000001008E5409 /* ResuscitationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0011C000001008E5409 /* ResuscitationModels.swift */; };
+		92NEW0022C000002008E5409 /* ResuscitationProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0021C000002008E5409 /* ResuscitationProtocols.swift */; };
+		92NEW0032C000003008E5409 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0031C000003008E5409 /* AudioService.swift */; };
+		92NEW0042C000004008E5409 /* TimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0041C000004008E5409 /* TimerService.swift */; };
+		92NEW0052C000005008E5409 /* CPRProtocolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0051C000005008E5409 /* CPRProtocolManager.swift */; };
+		92NEW0062C000006008E5409 /* ModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0061C000006008E5409 /* ModeSelectionView.swift */; };
+		92NEW0072C000007008E5409 /* InstructorModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0071C000007008E5409 /* InstructorModeView.swift */; };
+		92NEW0082C000008008E5409 /* NormalUserModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0081C000008008E5409 /* NormalUserModeView.swift */; };
+		92NEW0092C000009008E5409 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0091C000009008E5409 /* InfoView.swift */; };
+		92NEW0102C000010008E5409 /* ResuscitationRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0101C000010008E5409 /* ResuscitationRecordView.swift */; };
+		92NEW0112C000011008E5409 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0111C000011008E5409 /* ButtonStyles.swift */; };
+		92NEW0122C000012008E5409 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0121C000012008E5409 /* Extensions.swift */; };
+		92NEW0132C000013008E5409 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0131C000013008E5409 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,12 +53,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		91AE390B2C7D903E008E5409 /* level-up-191997.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "level-up-191997.mp3"; sourceTree = "<group>"; };
-		91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationSummaryView.swift; sourceTree = "<group>"; };
-		91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationGuidelineSystem.swift; sourceTree = "<group>"; };
+		91AE390B2C7D903E008E5409 /* level-up-191997.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Resources/level-up-191997.mp3"; sourceTree = "<group>"; };
+		91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ResuscitationSummaryView.swift; sourceTree = "<group>"; };
+		91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/ResuscitationGuidelineSystem.swift; sourceTree = "<group>"; };
 		91C80FBB2C636B8800E87A87 /* ResApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C80FBE2C636B8800E87A87 /* ResAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppApp.swift; sourceTree = "<group>"; };
-		91C80FC02C636B8800E87A87 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		91C80FC02C636B8800E87A87 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ContentView.swift; sourceTree = "<group>"; };
 		91C80FC22C636B8C00E87A87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91C80FC52C636B8C00E87A87 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		91C80FCB2C636B8C00E87A87 /* ResAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,9 +66,22 @@
 		91C80FD52C636B8C00E87A87 /* ResAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C80FD92C636B8C00E87A87 /* ResAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppUITests.swift; sourceTree = "<group>"; };
 		91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuscitationManager.swift; sourceTree = "<group>"; };
-		91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalButtonView.swift; sourceTree = "<group>"; };
-		91DB0F152C7F2CFB005E85DE /* buzzer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = buzzer.wav; sourceTree = "<group>"; };
+		91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managers/ResuscitationManager.swift; sourceTree = "<group>"; };
+		91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/FunctionalButtonView.swift; sourceTree = "<group>"; };
+		91DB0F152C7F2CFB005E85DE /* buzzer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/buzzer.wav; sourceTree = "<group>"; };
+		92NEW0011C000001008E5409 /* ResuscitationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/ResuscitationModels.swift; sourceTree = "<group>"; };
+		92NEW0021C000002008E5409 /* ResuscitationProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols/ResuscitationProtocols.swift; sourceTree = "<group>"; };
+		92NEW0031C000003008E5409 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/AudioService.swift; sourceTree = "<group>"; };
+		92NEW0041C000004008E5409 /* TimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/TimerService.swift; sourceTree = "<group>"; };
+		92NEW0051C000005008E5409 /* CPRProtocolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managers/CPRProtocolManager.swift; sourceTree = "<group>"; };
+		92NEW0061C000006008E5409 /* ModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ModeSelectionView.swift; sourceTree = "<group>"; };
+		92NEW0071C000007008E5409 /* InstructorModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/InstructorModeView.swift; sourceTree = "<group>"; };
+		92NEW0081C000008008E5409 /* NormalUserModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/NormalUserModeView.swift; sourceTree = "<group>"; };
+		92NEW0091C000009008E5409 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/InfoView.swift; sourceTree = "<group>"; };
+		92NEW0101C000010008E5409 /* ResuscitationRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ResuscitationRecordView.swift; sourceTree = "<group>"; };
+		92NEW0111C000011008E5409 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ButtonStyles.swift; sourceTree = "<group>"; };
+		92NEW0121C000012008E5409 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/Extensions.swift; sourceTree = "<group>"; };
+		92NEW0131C000013008E5409 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,18 +132,95 @@
 		91C80FBD2C636B8800E87A87 /* ResApp */ = {
 			isa = PBXGroup;
 			children = (
-				91DB0F152C7F2CFB005E85DE /* buzzer.wav */,
-				91AE390B2C7D903E008E5409 /* level-up-191997.mp3 */,
 				91C80FBE2C636B8800E87A87 /* ResAppApp.swift */,
-				91C80FC02C636B8800E87A87 /* ContentView.swift */,
+				92NEW1002C000100008E5409 /* Models */,
+				92NEW1012C000101008E5409 /* Views */,
+				92NEW1022C000102008E5409 /* Managers */,
+				92NEW1032C000103008E5409 /* Services */,
+				92NEW1042C000104008E5409 /* Protocols */,
+				92NEW1052C000105008E5409 /* Utils */,
+				92NEW1062C000106008E5409 /* Resources */,
 				91C80FC22C636B8C00E87A87 /* Assets.xcassets */,
 				91C80FC42C636B8C00E87A87 /* Preview Content */,
-				91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */,
-				91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */,
-				91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */,
-				91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */,
 			);
 			path = ResApp;
+			sourceTree = "<group>";
+		};
+		92NEW1002C000100008E5409 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				92NEW0011C000001008E5409 /* ResuscitationModels.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		92NEW1012C000101008E5409 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				91C80FC02C636B8800E87A87 /* ContentView.swift */,
+				91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */,
+				91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */,
+				92NEW1072C000107008E5409 /* Components */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		92NEW1022C000102008E5409 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */,
+				92NEW0051C000005008E5409 /* CPRProtocolManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		92NEW1032C000103008E5409 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */,
+				92NEW0031C000003008E5409 /* AudioService.swift */,
+				92NEW0041C000004008E5409 /* TimerService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		92NEW1042C000104008E5409 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				92NEW0021C000002008E5409 /* ResuscitationProtocols.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		92NEW1052C000105008E5409 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				92NEW0121C000012008E5409 /* Extensions.swift */,
+				92NEW0131C000013008E5409 /* Constants.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		92NEW1062C000106008E5409 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				91DB0F152C7F2CFB005E85DE /* buzzer.wav */,
+				91AE390B2C7D903E008E5409 /* level-up-191997.mp3 */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		92NEW1072C000107008E5409 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				92NEW0061C000006008E5409 /* ModeSelectionView.swift */,
+				92NEW0071C000007008E5409 /* InstructorModeView.swift */,
+				92NEW0081C000008008E5409 /* NormalUserModeView.swift */,
+				92NEW0091C000009008E5409 /* InfoView.swift */,
+				92NEW0101C000010008E5409 /* ResuscitationRecordView.swift */,
+				92NEW0111C000011008E5409 /* ButtonStyles.swift */,
+			);
+			name = Components;
 			sourceTree = "<group>";
 		};
 		91C80FC42C636B8C00E87A87 /* Preview Content */ = {
@@ -283,6 +386,19 @@
 				91C80FBF2C636B8800E87A87 /* ResAppApp.swift in Sources */,
 				91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */,
 				91C33EE42C786C390092BCE3 /* ResuscitationGuidelineSystem.swift in Sources */,
+				92NEW0012C000001008E5409 /* ResuscitationModels.swift in Sources */,
+				92NEW0022C000002008E5409 /* ResuscitationProtocols.swift in Sources */,
+				92NEW0032C000003008E5409 /* AudioService.swift in Sources */,
+				92NEW0042C000004008E5409 /* TimerService.swift in Sources */,
+				92NEW0052C000005008E5409 /* CPRProtocolManager.swift in Sources */,
+				92NEW0062C000006008E5409 /* ModeSelectionView.swift in Sources */,
+				92NEW0072C000007008E5409 /* InstructorModeView.swift in Sources */,
+				92NEW0082C000008008E5409 /* NormalUserModeView.swift in Sources */,
+				92NEW0092C000009008E5409 /* InfoView.swift in Sources */,
+				92NEW0102C000010008E5409 /* ResuscitationRecordView.swift in Sources */,
+				92NEW0112C000011008E5409 /* ButtonStyles.swift in Sources */,
+				92NEW0122C000012008E5409 /* Extensions.swift in Sources */,
+				92NEW0132C000013008E5409 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
