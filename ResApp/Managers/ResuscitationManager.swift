@@ -10,6 +10,9 @@ class ResuscitationManager: ObservableObject, ResuscitationManagerProtocol {
     // Time offset for fast-forward functionality (in seconds)
     @Published var timeOffset: TimeInterval = 0
     
+    // Track the last real time when offset was updated (for proper time calculation)
+    private var lastRealTimeUpdate: Date?
+    
     // Add this line to create an instance of SmartResuscitationGuidelineSystem
     @Published var guidelineSystem = SmartResuscitationGuidelineSystem()
 
@@ -18,6 +21,7 @@ class ResuscitationManager: ObservableObject, ResuscitationManagerProtocol {
             isResuscitationStarted = true
             resuscitationStartTime = Date()
             timeOffset = 0
+            lastRealTimeUpdate = Date()
             events = []
             currentSessionID = UUID()
             
@@ -30,6 +34,7 @@ class ResuscitationManager: ObservableObject, ResuscitationManagerProtocol {
             events = []
             resuscitationStartTime = nil
             timeOffset = 0
+            lastRealTimeUpdate = nil
             guidelineSystem.stopGuideline() // Add this line to stop the guideline system
         }
 
@@ -55,18 +60,33 @@ class ResuscitationManager: ObservableObject, ResuscitationManagerProtocol {
     // Get current adjusted timestamp (accounting for fast-forward)
     func getCurrentTimestamp() -> Date {
         guard let startTime = resuscitationStartTime else { return Date() }
-        return startTime.addingTimeInterval(timeOffset)
+        let currentElapsed = getElapsedTime()
+        return startTime.addingTimeInterval(currentElapsed)
     }
     
     // Get elapsed time since resuscitation started (accounting for fast-forward)
     func getElapsedTime() -> TimeInterval {
-        guard let startTime = resuscitationStartTime else { return 0 }
-        return Date().timeIntervalSince(startTime) + timeOffset
+        guard let _ = resuscitationStartTime,
+              let lastUpdate = lastRealTimeUpdate else { return 0 }
+        
+        // Calculate real elapsed time since last offset update
+        let realElapsedSinceLastUpdate = Date().timeIntervalSince(lastUpdate)
+        
+        // Total elapsed = offset (from fast forwards) + real time since last update
+        return timeOffset + realElapsedSinceLastUpdate
     }
     
     // Fast forward time by specified seconds
     func fastForward(by seconds: TimeInterval) {
-        timeOffset += seconds
+        // First, capture current elapsed time (including any real time progression)
+        let currentElapsed = getElapsedTime()
+        
+        // Update the offset to include current elapsed + fast forward amount
+        timeOffset = currentElapsed + seconds
+        
+        // Reset the last update time to now (so we start measuring real time from this point)
+        lastRealTimeUpdate = Date()
+        
         // Also advance the guideline system timer
         guidelineSystem.elapsedTime += seconds
     }
