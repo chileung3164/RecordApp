@@ -29,10 +29,10 @@ struct NormalUserStartView: View {
 
     var body: some View {
         VStack(spacing: 30) {
-            Text("ResApp - User Mode")
+            Text("ResApp - Clinical Mode")
                 .font(.system(size: 36, weight: .bold, design: .rounded))
 
-            Text("Simplified Resuscitation Assistant")
+            Text("Real-Time Patient Resuscitation Assistant")
                 .font(.title2)
                 .multilineTextAlignment(.center)
 

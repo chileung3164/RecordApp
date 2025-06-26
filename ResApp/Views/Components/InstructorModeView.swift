@@ -29,10 +29,10 @@ struct InstructorStartView: View {
 
     var body: some View {
         VStack(spacing: 30) {
-            Text("ResApp - Instructor Mode")
+            Text("ResApp - Training Mode")
                 .font(.system(size: 36, weight: .bold, design: .rounded))
 
-            Text("Advanced Resuscitation Assistant for Medical Professionals")
+            Text("Medical Education and Simulation Assistant")
                 .font(.title2)
                 .multilineTextAlignment(.center)
 
