@@ -125,16 +125,26 @@ struct EditSessionView: View {
                 }
             }
         }
-        .sheet(isPresented: $showingEventEditor) {
-            if let event = editingEvent, let index = editingEventIndex {
-                EditEventView(
-                    event: event,
-                    sessionStartTime: editableSession.startTime
-                ) { updatedEvent in
-                    editableSession.events[index] = updatedEvent
-                    editingEvent = nil
-                    editingEventIndex = nil
+        .sheet(item: Binding<EditEventWrapper?>(
+            get: {
+                if let event = editingEvent, let index = editingEventIndex {
+                    return EditEventWrapper(event: event, index: index)
                 }
+                return nil
+            },
+            set: { _ in
+                editingEvent = nil
+                editingEventIndex = nil
+                showingEventEditor = false
+            }
+        )) { wrapper in
+            EditEventView(
+                event: wrapper.event,
+                sessionStartTime: editableSession.startTime
+            ) { updatedEvent in
+                editableSession.events[wrapper.index] = updatedEvent
+                editingEvent = nil
+                editingEventIndex = nil
             }
         }
         .sheet(isPresented: $showingAddEventSheet) {
@@ -261,6 +271,13 @@ struct EditableEventRow: View {
         let seconds = Int(interval) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
+}
+
+// MARK: - Helper Struct for Sheet Presentation
+struct EditEventWrapper: Identifiable {
+    let id = UUID()
+    let event: ResuscitationEvent
+    let index: Int
 }
 
 #Preview {

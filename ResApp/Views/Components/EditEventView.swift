@@ -41,7 +41,7 @@ struct EditEventView: View {
         self.onSave = onSave
         self._eventTimestamp = State(initialValue: event.timestamp)
         
-        // Initialize the event type selection and associated values
+        // Optimized initialization - direct assignment instead of State initialization
         switch event.type {
         case .startCPR:
             self._selectedEventType = State(initialValue: .startCPR)
