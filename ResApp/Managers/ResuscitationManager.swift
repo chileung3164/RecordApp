@@ -6,6 +6,8 @@ class ResuscitationManager: ObservableObject, ResuscitationManagerProtocol {
     @Published var resuscitationStartTime: Date?
     @Published var shouldShowAttentionEffect = false
     @Published var currentSessionID = UUID()
+    @Published var currentSessionMode: ResuscitationSession.SessionMode = .training
+    @Published var patientOutcome: PatientOutcome = .none
     
     // Time offset for fast-forward functionality (in seconds)
     @Published var timeOffset: TimeInterval = 0
@@ -15,26 +17,50 @@ class ResuscitationManager: ObservableObject, ResuscitationManagerProtocol {
     
     // Add this line to create an instance of SmartResuscitationGuidelineSystem
     @Published var guidelineSystem = SmartResuscitationGuidelineSystem()
-
+    
+    // Session storage service
+    var sessionStorageService: SessionStorageService
+    
+    init(sessionStorageService: SessionStorageService) {
+        self.sessionStorageService = sessionStorageService
+    }
         
-    func startResuscitation() {
+    func startResuscitation(mode: ResuscitationSession.SessionMode) {
             isResuscitationStarted = true
             resuscitationStartTime = Date()
             timeOffset = 0
             lastRealTimeUpdate = Date()
             events = []
             currentSessionID = UUID()
+            currentSessionMode = mode
+            patientOutcome = .none
             
             // Now we can directly access guidelineSystem
             guidelineSystem.resetGuideline()
     }
     
     func endResuscitation() {
+            // Save the session before clearing data
+            if let startTime = resuscitationStartTime, !events.isEmpty {
+                let session = ResuscitationSession(
+                    sessionID: currentSessionID,
+                    startTime: startTime,
+                    endTime: Date(),
+                    events: events,
+                    mode: currentSessionMode,
+                    patientOutcome: patientOutcome
+                )
+                sessionStorageService.saveSession(session)
+            }
+            
+            // Clear current session data
             isResuscitationStarted = false
             events = []
             resuscitationStartTime = nil
             timeOffset = 0
             lastRealTimeUpdate = nil
+            currentSessionID = UUID()
+            patientOutcome = .none
             guidelineSystem.stopGuideline() // Add this line to stop the guideline system
         }
 
@@ -54,6 +80,18 @@ class ResuscitationManager: ObservableObject, ResuscitationManagerProtocol {
         events.append(ResuscitationEvent(type: .medication(medication), timestamp: getCurrentTimestamp()))
         if medication == "Epinephrine" {
             triggerAttentionEffect()
+        }
+    }
+    
+    func setPatientOutcome(_ outcome: PatientOutcome) {
+        patientOutcome = outcome
+        switch outcome {
+        case .alive:
+            events.append(ResuscitationEvent(type: .patientOutcomeAlive, timestamp: getCurrentTimestamp()))
+        case .death:
+            events.append(ResuscitationEvent(type: .patientOutcomeDeath, timestamp: getCurrentTimestamp()))
+        case .none:
+            break
         }
     }
 

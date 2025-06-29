@@ -85,7 +85,9 @@ struct ModeSelectionView: View {
                     }
                     .padding(.horizontal, 24)
                 }
-                .padding(.bottom, 50)
+                .padding(.bottom, 40)
+                
+
                 
                 // MARK: - Footer Section
                 VStack(spacing: 20) {
@@ -201,5 +203,167 @@ struct CardButtonStyle: ButtonStyle {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
+
+
+// MARK: - Medical Session Summary Component
+struct MedicalSessionSummary: View {
+    @EnvironmentObject var sessionStorageService: SessionStorageService
+    @State private var showAllSessions = false
+    let currentMode: ResuscitationSession.SessionMode
+    
+    var filteredSessions: [ResuscitationSession] {
+        Array(sessionStorageService.completedSessions.filter { $0.mode == currentMode }.prefix(3))
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Session Log")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.primary)
+                    
+                    Text("Recent \(currentMode.rawValue) Sessions")
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                Button(action: {
+                    showAllSessions = true
+                }) {
+                    Text("View All")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.blue)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .background(Color(.systemGray6))
+            
+            // Session List or Empty State
+            if filteredSessions.isEmpty {
+                VStack(spacing: 12) {
+                    Text("No Sessions Recorded")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.secondary)
+                    
+                    Text("Complete a resuscitation session to view detailed logs and performance metrics")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.vertical, 32)
+                .padding(.horizontal, 20)
+            } else {
+                LazyVStack(spacing: 1) {
+                    ForEach(filteredSessions) { session in
+                        MedicalSessionRow(session: session)
+                        
+                        if session.id != filteredSessions.last?.id {
+                            Divider()
+                                .padding(.leading, 20)
+                        }
+                    }
+                }
+            }
+        }
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color(.systemGray4), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+        .sheet(isPresented: $showAllSessions) {
+            SessionHistoryView()
+        }
+    }
+}
+
+// MARK: - Medical Session Row
+struct MedicalSessionRow: View {
+    let session: ResuscitationSession
+    @State private var showDetailView = false
+    
+    var body: some View {
+        Button(action: {
+            showDetailView = true
+        }) {
+            HStack(spacing: 16) {
+                // Session Info
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 8) {
+                        Text(formatDate(session.startTime))
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.primary)
+                        
+                        Rectangle()
+                            .fill(Color(.systemGray4))
+                            .frame(width: 1, height: 12)
+                        
+                        Text(session.formattedDuration)
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.primary)
+                    }
+                    
+                    HStack(spacing: 12) {
+                        Text("\(session.eventCount) events")
+                            .font(.system(size: 12))
+                            .foregroundColor(.secondary)
+                        
+                        if session.shockCount > 0 {
+                            Text("\(session.shockCount) shocks")
+                                .font(.system(size: 12))
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        if session.medicationCount > 0 {
+                            Text("\(session.medicationCount) medications")
+                                .font(.system(size: 12))
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                
+                Spacer()
+                
+                // Outcome
+                if session.patientOutcome != .none {
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text("OUTCOME")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(.secondary)
+                        
+                        Text(session.patientOutcome == .alive ? "ROSC" : "DECEASED")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(session.patientOutcome == .alive ? .green : .red)
+                    }
+                }
+                
+                // Chevron
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+        }
+        .buttonStyle(PlainButtonStyle())
+        .sheet(isPresented: $showDetailView) {
+            SessionDetailView(session: session)
+        }
+    }
+    
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
 } 

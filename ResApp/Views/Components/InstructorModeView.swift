@@ -28,39 +28,67 @@ struct InstructorStartView: View {
     @State private var isShowingInfo = false
 
     var body: some View {
-        VStack(spacing: 30) {
-            Text("ResApp - Training Mode")
-                .font(.system(size: 36, weight: .bold, design: .rounded))
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(spacing: 0) {
+                    // Top spacer
+                    Spacer()
+                        .frame(minHeight: 60)
+                    
+                    VStack(spacing: 24) {
+                        // Header Section
+                        VStack(spacing: 16) {
+                            Text("ResApp - Training Mode")
+                                .font(.system(size: 32, weight: .bold, design: .rounded))
 
-            Text("Medical Education and Simulation Assistant")
-                .font(.title2)
-                .multilineTextAlignment(.center)
+                            Text("Medical Education and Simulation Assistant")
+                                .font(.title3)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.secondary)
+                        }
 
-            Button(action: {
-                resuscitationManager.startResuscitation()
-            }) {
-                Text("Start Resuscitation")
-                    .font(.title2.bold())
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.green)
-                    .cornerRadius(15)
-            }
-            .padding(.horizontal, 50)
+                        // Start Button
+                        Button(action: {
+                            resuscitationManager.startResuscitation(mode: .training)
+                        }) {
+                            Text("Start Training Session")
+                                .font(.title2.bold())
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 16)
+                                .background(Color.blue)
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal, 40)
 
-            Button("More Information") {
-                isShowingInfo = true
+                        // Session Summary
+                        MedicalSessionSummary(currentMode: .training)
+                            .padding(.horizontal, 20)
+
+                        // Action Buttons
+                        VStack(spacing: 12) {
+                            Button("More Information") {
+                                isShowingInfo = true
+                            }
+                            .foregroundColor(.blue)
+                            .sheet(isPresented: $isShowingInfo) {
+                                InfoView()
+                            }
+                            
+                            Text("Copyright ©️ 2025 QEH MDSSC. All Rights Reserved.")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
+                    
+                    // Bottom spacer
+                    Spacer()
+                        .frame(minHeight: 60)
+                }
+                .frame(minHeight: geometry.size.height)
             }
-            .sheet(isPresented: $isShowingInfo) {
-                InfoView()
-            }
-            
-            Text("Copyright ©️ 2025 QEH MDSSC. All Rights Reserved.")
-                .font(.footnote)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
         }
-        .padding()
+        .background(Color(.systemBackground))
     }
 } 

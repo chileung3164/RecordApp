@@ -33,6 +33,11 @@
 		92NEW0112C000011008E5409 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0111C000011008E5409 /* ButtonStyles.swift */; };
 		92NEW0122C000012008E5409 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0121C000012008E5409 /* Extensions.swift */; };
 		92NEW0132C000013008E5409 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0131C000013008E5409 /* Constants.swift */; };
+		93NEW0152C000015008E5409 /* SessionStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0142C000014008E5409 /* SessionStorageService.swift */; };
+		93NEW0172C000017008E5409 /* SessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0162C000016008E5409 /* SessionHistoryView.swift */; };
+		93NEW0192C000019008E5409 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0182C000018008E5409 /* SessionDetailView.swift */; };
+		A1PDF0012C000020008E5409 /* PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1PDF0022C000021008E5409 /* PDFExportService.swift */; };
+		A1SHARE012C000022008E5409 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1SHARE022C000023008E5409 /* ShareSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +87,11 @@
 		92NEW0111C000011008E5409 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ButtonStyles.swift; sourceTree = "<group>"; };
 		92NEW0121C000012008E5409 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/Extensions.swift; sourceTree = "<group>"; };
 		92NEW0131C000013008E5409 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/Constants.swift; sourceTree = "<group>"; };
+		93NEW0142C000014008E5409 /* SessionStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SessionStorageService.swift; sourceTree = "<group>"; };
+		93NEW0162C000016008E5409 /* SessionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/SessionHistoryView.swift; sourceTree = "<group>"; };
+		93NEW0182C000018008E5409 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/SessionDetailView.swift; sourceTree = "<group>"; };
+		A1PDF0022C000021008E5409 /* PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/PDFExportService.swift; sourceTree = "<group>"; };
+		A1SHARE022C000023008E5409 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/ShareSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +190,8 @@
 				91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */,
 				92NEW0031C000003008E5409 /* AudioService.swift */,
 				92NEW0041C000004008E5409 /* TimerService.swift */,
+				93NEW0142C000014008E5409 /* SessionStorageService.swift */,
+				A1PDF0022C000021008E5409 /* PDFExportService.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -197,6 +209,7 @@
 			children = (
 				92NEW0121C000012008E5409 /* Extensions.swift */,
 				92NEW0131C000013008E5409 /* Constants.swift */,
+				A1SHARE022C000023008E5409 /* ShareSheet.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -219,6 +232,8 @@
 				92NEW0091C000009008E5409 /* InfoView.swift */,
 				92NEW0101C000010008E5409 /* ResuscitationRecordView.swift */,
 				92NEW0111C000011008E5409 /* ButtonStyles.swift */,
+				93NEW0162C000016008E5409 /* SessionHistoryView.swift */,
+				93NEW0182C000018008E5409 /* SessionDetailView.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -399,6 +414,11 @@
 				92NEW0112C000011008E5409 /* ButtonStyles.swift in Sources */,
 				92NEW0122C000012008E5409 /* Extensions.swift in Sources */,
 				92NEW0132C000013008E5409 /* Constants.swift in Sources */,
+				93NEW0152C000015008E5409 /* SessionStorageService.swift in Sources */,
+				93NEW0172C000017008E5409 /* SessionHistoryView.swift in Sources */,
+				93NEW0192C000019008E5409 /* SessionDetailView.swift in Sources */,
+				A1PDF0012C000020008E5409 /* PDFExportService.swift in Sources */,
+				A1SHARE012C000022008E5409 /* ShareSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

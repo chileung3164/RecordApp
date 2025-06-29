@@ -6,7 +6,7 @@ protocol ResuscitationManagerProtocol: ObservableObject {
     var resuscitationStartTime: Date? { get set }
     var events: [ResuscitationEvent] { get set }
     
-    func startResuscitation()
+    func startResuscitation(mode: ResuscitationSession.SessionMode)
     func endResuscitation()
     func performDefibrillation()
     func recordECGRhythm(_ rhythm: String)
