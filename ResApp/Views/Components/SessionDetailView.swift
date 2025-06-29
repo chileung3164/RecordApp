@@ -3,16 +3,9 @@ import SwiftUI
 struct SessionDetailView: View {
     let session: ResuscitationSession
     @Environment(\.dismiss) private var dismiss
-    @State private var showingShareSheet = false
-    @State private var pdfData: Data?
     
     var body: some View {
         SessionDetailContentView(session: session)
-            .sheet(isPresented: $showingShareSheet) {
-                if let data = pdfData {
-                    ShareSheet(items: [data])
-                }
-            }
     }
 }
 
@@ -21,10 +14,22 @@ struct SessionDetailContentView: View {
     let session: ResuscitationSession
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var sessionStorageService: SessionStorageService
-    @State private var showingShareSheet = false
-    @State private var pdfData: Data?
     @State private var showingDeleteConfirmation = false
-    @State private var showingEditSession = false
+    @State private var isExporting = false
+    @State private var activeSheet: ActiveSheet?
+    @State private var pdfData: Data?
+    
+    enum ActiveSheet: Identifiable {
+        case edit
+        case share(Data)
+        
+        var id: String {
+            switch self {
+            case .edit: return "edit"
+            case .share: return "share"
+            }
+        }
+    }
     
     var body: some View {
         Group {
@@ -286,7 +291,7 @@ struct SessionDetailContentView: View {
                     }
                     
                     Button(action: {
-                        showingEditSession = true
+                        editSession()
                     }) {
                         Image(systemName: "pencil")
                             .foregroundColor(.blue)
@@ -301,12 +306,12 @@ struct SessionDetailContentView: View {
                 }
             }
         })
-        .sheet(isPresented: $showingEditSession) {
-            EditSessionView(session: session)
-                .environmentObject(sessionStorageService)
-        }
-        .sheet(isPresented: $showingShareSheet) {
-            if let data = pdfData {
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .edit:
+                EditSessionView(session: session)
+                    .environmentObject(sessionStorageService)
+            case .share(let data):
                 ShareSheet(items: [data])
             }
         }
@@ -338,9 +343,27 @@ struct SessionDetailContentView: View {
     }
     
     private func exportToPDF() {
-        let pdfData = PDFExportService.shared.exportSessionToPDF(session)
-        self.pdfData = pdfData
-        showingShareSheet = true
+        // Prevent multiple simultaneous exports
+        guard !isExporting else { return }
+        
+        isExporting = true
+        
+        // Generate PDF data synchronously
+        let generatedPDFData = PDFExportService.shared.exportSessionToPDF(session)
+        
+        // Ensure we have valid data before proceeding
+        guard !generatedPDFData.isEmpty else {
+            isExporting = false
+            return
+        }
+        
+        // Present the share sheet with the PDF data
+        self.activeSheet = .share(generatedPDFData)
+        self.isExporting = false
+    }
+    
+    private func editSession() {
+        self.activeSheet = .edit
     }
     
     private func deleteSession() {

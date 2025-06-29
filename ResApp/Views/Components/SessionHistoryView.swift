@@ -4,14 +4,25 @@ struct SessionHistoryView: View {
     @EnvironmentObject var sessionStorageService: SessionStorageService
     @Environment(\.dismiss) private var dismiss
     @State private var selectedFilter: FilterType = .all
-    @State private var sessionToShow: ResuscitationSession?
-    @State private var showingShareSheet = false
-    @State private var pdfData: Data?
     @State private var showingDeleteConfirmation = false
     @State private var sessionToDelete: ResuscitationSession?
     @State private var showingClearAllConfirmation = false
-    @State private var sessionToEdit: ResuscitationSession?
-    @State private var showingEditSession = false
+    @State private var isExporting = false
+    @State private var activeSheet: ActiveSheet?
+    
+    enum ActiveSheet: Identifiable {
+        case sessionDetail(ResuscitationSession)
+        case editSession(ResuscitationSession)
+        case shareData(Data)
+        
+        var id: String {
+            switch self {
+            case .sessionDetail(let session): return "detail-\(session.id)"
+            case .editSession(let session): return "edit-\(session.id)"
+            case .shareData: return "share"
+            }
+        }
+    }
     
     private enum FilterType: String, CaseIterable {
         case all = "All Sessions"
@@ -85,8 +96,8 @@ struct SessionHistoryView: View {
                 } else {
                     List {
                         ForEach(filteredSessions) { session in
-                            SessionRowView(session: session) {
-                                sessionToShow = session
+                                                            SessionRowView(session: session) {
+                                    activeSheet = .sessionDetail(session)
                             }
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
@@ -108,8 +119,7 @@ struct SessionHistoryView: View {
                             }
                             .swipeActions(edge: .leading) {
                                 Button(action: {
-                                    sessionToEdit = session
-                                    showingEditSession = true
+                                    editSession(session)
                                 }) {
                                     Label("Edit", systemImage: "pencil")
                                 }
@@ -159,20 +169,17 @@ struct SessionHistoryView: View {
                 }
             })
         }
-        .sheet(item: $sessionToShow) { session in
-            NavigationView {
-                SessionDetailContentView(session: session)
-                    .environmentObject(sessionStorageService)
-            }
-        }
-        .sheet(isPresented: $showingEditSession) {
-            if let session = sessionToEdit {
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .sessionDetail(let session):
+                NavigationView {
+                    SessionDetailContentView(session: session)
+                        .environmentObject(sessionStorageService)
+                }
+            case .editSession(let session):
                 EditSessionView(session: session)
                     .environmentObject(sessionStorageService)
-            }
-        }
-        .sheet(isPresented: $showingShareSheet) {
-            if let data = pdfData {
+            case .shareData(let data):
                 ShareSheet(items: [data])
             }
         }
@@ -209,22 +216,53 @@ struct SessionHistoryView: View {
     }
     
     private func exportAllSessions() {
+        guard !isExporting else { return }
+        isExporting = true
+        
         let combinedPDF = PDFExportService.shared.exportMultipleSessionsToPDF(sessionStorageService.completedSessions, title: "All Sessions Report")
-        pdfData = combinedPDF
-        showingShareSheet = true
+        
+        guard !combinedPDF.isEmpty else {
+            isExporting = false
+            return
+        }
+        
+        self.activeSheet = .shareData(combinedPDF)
+        self.isExporting = false
     }
     
     private func exportFilteredSessions() {
+        guard !isExporting else { return }
+        isExporting = true
+        
         let title = "\(selectedFilter.rawValue) Report"
         let combinedPDF = PDFExportService.shared.exportMultipleSessionsToPDF(filteredSessions, title: title)
-        pdfData = combinedPDF
-        showingShareSheet = true
+        
+        guard !combinedPDF.isEmpty else {
+            isExporting = false
+            return
+        }
+        
+        self.activeSheet = .shareData(combinedPDF)
+        self.isExporting = false
     }
     
     private func exportSingleSession(_ session: ResuscitationSession) {
+        guard !isExporting else { return }
+        isExporting = true
+        
         let singlePDF = PDFExportService.shared.exportSessionToPDF(session)
-        pdfData = singlePDF
-        showingShareSheet = true
+        
+        guard !singlePDF.isEmpty else {
+            isExporting = false
+            return
+        }
+        
+        self.activeSheet = .shareData(singlePDF)
+        self.isExporting = false
+    }
+    
+    private func editSession(_ session: ResuscitationSession) {
+        self.activeSheet = .editSession(session)
     }
 }
 
