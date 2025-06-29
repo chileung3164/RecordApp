@@ -101,13 +101,24 @@ enum RhythmType {
 
 // MARK: - Resuscitation Session Model
 struct ResuscitationSession: Identifiable, Codable {
-    let id = UUID()
+    let id: UUID
     let sessionID: UUID
     var startTime: Date
     var endTime: Date
     var events: [ResuscitationEvent]
     var mode: SessionMode
     var patientOutcome: PatientOutcome
+    
+    // Custom initializer for creating new sessions
+    init(sessionID: UUID = UUID(), startTime: Date, endTime: Date, events: [ResuscitationEvent] = [], mode: SessionMode, patientOutcome: PatientOutcome = .none) {
+        self.id = UUID()
+        self.sessionID = sessionID
+        self.startTime = startTime
+        self.endTime = endTime
+        self.events = events
+        self.mode = mode
+        self.patientOutcome = patientOutcome
+    }
     
     enum SessionMode: String, Codable, CaseIterable {
         case training = "Training Mode"

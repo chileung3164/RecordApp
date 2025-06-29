@@ -54,6 +54,8 @@ struct ResuscitationRecordView: View {
             Rectangle()
                 .stroke(Color.black, lineWidth: 2)
         )
+        .padding(.horizontal, 16)  // Add horizontal spacing from screen edges
+        .padding(.vertical, 20)    // Add vertical spacing from screen edges
     }
     
     private func formatTime(_ date: Date) -> String {

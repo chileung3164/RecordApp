@@ -487,9 +487,8 @@ struct FunctionalButtonView: View {
     private func recordECGRhythm(_ rhythm: String) {
         // If CPR is running, record CPR event with duration
         if cprCounter > 0 {
-            let isFirst = resuscitationManager.events.first { if case .cprCycle(let _) = $0.type { return true } else { return false } } == nil
+            let _ = resuscitationManager.events.first { if case .cprCycle(_) = $0.type { return true } else { return false } } == nil
             let duration = formattedCPRTime
-            let label = isFirst ? "CPR 1st (Duration: \(duration))" : "CPR (Duration: \(duration))"
             resuscitationManager.events.append(ResuscitationEvent(type: .cprCycle(duration: duration), timestamp: resuscitationManager.getCurrentTimestamp()))
             stopCPRTimer()
             cprCounter = 0
