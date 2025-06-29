@@ -103,11 +103,11 @@ enum RhythmType {
 struct ResuscitationSession: Identifiable, Codable {
     let id = UUID()
     let sessionID: UUID
-    let startTime: Date
-    let endTime: Date
-    let events: [ResuscitationEvent]
-    let mode: SessionMode
-    let patientOutcome: PatientOutcome
+    var startTime: Date
+    var endTime: Date
+    var events: [ResuscitationEvent]
+    var mode: SessionMode
+    var patientOutcome: PatientOutcome
     
     enum SessionMode: String, Codable, CaseIterable {
         case training = "Training Mode"

@@ -38,6 +38,9 @@
 		93NEW0192C000019008E5409 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0182C000018008E5409 /* SessionDetailView.swift */; };
 		A1PDF0012C000020008E5409 /* PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1PDF0022C000021008E5409 /* PDFExportService.swift */; };
 		A1SHARE012C000022008E5409 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1SHARE022C000023008E5409 /* ShareSheet.swift */; };
+		6F269030165D41AF98BDB7FA /* EditSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B11EA266E04456B43EC4AB /* EditSessionView.swift */; };
+		F6523D5F80D64784AC9C5A34 /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68E2A5AE68C4132A93C7E58 /* EditEventView.swift */; };
+		2018CC46556D4C539E3DD214 /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D94E777283044FB8EC3C3E8 /* AddEventView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +95,9 @@
 		93NEW0182C000018008E5409 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/SessionDetailView.swift; sourceTree = "<group>"; };
 		A1PDF0022C000021008E5409 /* PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/PDFExportService.swift; sourceTree = "<group>"; };
 		A1SHARE022C000023008E5409 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/ShareSheet.swift; sourceTree = "<group>"; };
+		96B11EA266E04456B43EC4AB /* EditSessionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/EditSessionView.swift; sourceTree = "<group>"; };
+		A68E2A5AE68C4132A93C7E58 /* EditEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/EditEventView.swift; sourceTree = "<group>"; };
+		7D94E777283044FB8EC3C3E8 /* AddEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/AddEventView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,7 +240,10 @@
 				92NEW0111C000011008E5409 /* ButtonStyles.swift */,
 				93NEW0162C000016008E5409 /* SessionHistoryView.swift */,
 				93NEW0182C000018008E5409 /* SessionDetailView.swift */,
-			);
+							96B11EA266E04456B43EC4AB /* EditSessionView.swift */,
+				A68E2A5AE68C4132A93C7E58 /* EditEventView.swift */,
+				7D94E777283044FB8EC3C3E8 /* AddEventView.swift */,
+);
 			name = Components;
 			sourceTree = "<group>";
 		};
@@ -370,8 +379,7 @@
 				91DB0F162C7F2CFB005E85DE /* buzzer.wav in Resources */,
 				91C80FC62C636B8C00E87A87 /* Preview Assets.xcassets in Resources */,
 				91C80FC32C636B8C00E87A87 /* Assets.xcassets in Resources */,
-				91AE390C2C7D903E008E5409 /* level-up-191997.mp3 in Resources */,
-			);
+				91AE390C2C7D903E008E5409 /* level-up-191997.mp3 in Resources */,);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		91C80FC92C636B8C00E87A87 /* Resources */ = {
@@ -419,6 +427,9 @@
 				93NEW0192C000019008E5409 /* SessionDetailView.swift in Sources */,
 				A1PDF0012C000020008E5409 /* PDFExportService.swift in Sources */,
 				A1SHARE012C000022008E5409 /* ShareSheet.swift in Sources */,
+				6F269030165D41AF98BDB7FA /* EditSessionView.swift in Sources */,
+				F6523D5F80D64784AC9C5A34 /* EditEventView.swift in Sources */,
+				2018CC46556D4C539E3DD214 /* AddEventView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

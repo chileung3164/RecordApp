@@ -20,8 +20,11 @@ struct SessionDetailView: View {
 struct SessionDetailContentView: View {
     let session: ResuscitationSession
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var sessionStorageService: SessionStorageService
     @State private var showingShareSheet = false
     @State private var pdfData: Data?
+    @State private var showingDeleteConfirmation = false
+    @State private var showingEditSession = false
     
     var body: some View {
         Group {
@@ -269,7 +272,7 @@ struct SessionDetailContentView: View {
         .navigationTitle("Session Detail")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbar {
+        .toolbar(content: {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button("Done") {
                     dismiss()
@@ -277,15 +280,43 @@ struct SessionDetailContentView: View {
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: exportToPDF) {
-                    Image(systemName: "square.and.arrow.up")
+                HStack(spacing: 16) {
+                    Button(action: exportToPDF) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    
+                    Button(action: {
+                        showingEditSession = true
+                    }) {
+                        Image(systemName: "pencil")
+                            .foregroundColor(.blue)
+                    }
+                    
+                    Button(action: {
+                        showingDeleteConfirmation = true
+                    }) {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                    }
                 }
             }
+        })
+        .sheet(isPresented: $showingEditSession) {
+            EditSessionView(session: session)
+                .environmentObject(sessionStorageService)
         }
         .sheet(isPresented: $showingShareSheet) {
             if let data = pdfData {
                 ShareSheet(items: [data])
             }
+        }
+        .alert("Delete Session", isPresented: $showingDeleteConfirmation) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                deleteSession()
+            }
+        } message: {
+            Text("Are you sure you want to delete this session? This action cannot be undone.")
         }
     }
     
@@ -310,6 +341,11 @@ struct SessionDetailContentView: View {
         let pdfData = PDFExportService.shared.exportSessionToPDF(session)
         self.pdfData = pdfData
         showingShareSheet = true
+    }
+    
+    private func deleteSession() {
+        sessionStorageService.deleteSession(session)
+        dismiss()
     }
 }
 

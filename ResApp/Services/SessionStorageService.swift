@@ -23,6 +23,13 @@ class SessionStorageService: ObservableObject {
         persistSessions()
     }
     
+    func updateSession(_ updatedSession: ResuscitationSession) {
+        if let index = completedSessions.firstIndex(where: { $0.id == updatedSession.id }) {
+            completedSessions[index] = updatedSession
+            persistSessions()
+        }
+    }
+    
     func clearAllSessions() {
         completedSessions.removeAll()
         persistSessions()

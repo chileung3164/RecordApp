@@ -7,6 +7,11 @@ struct SessionHistoryView: View {
     @State private var sessionToShow: ResuscitationSession?
     @State private var showingShareSheet = false
     @State private var pdfData: Data?
+    @State private var showingDeleteConfirmation = false
+    @State private var sessionToDelete: ResuscitationSession?
+    @State private var showingClearAllConfirmation = false
+    @State private var sessionToEdit: ResuscitationSession?
+    @State private var showingEditSession = false
     
     private enum FilterType: String, CaseIterable {
         case all = "All Sessions"
@@ -92,6 +97,23 @@ struct SessionHistoryView: View {
                                     Label("Export", systemImage: "square.and.arrow.up")
                                 }
                                 .tint(.blue)
+                                
+                                Button(role: .destructive, action: {
+                                    sessionToDelete = session
+                                    showingDeleteConfirmation = true
+                                }) {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                                .tint(.red)
+                            }
+                            .swipeActions(edge: .leading) {
+                                Button(action: {
+                                    sessionToEdit = session
+                                    showingEditSession = true
+                                }) {
+                                    Label("Edit", systemImage: "pencil")
+                                }
+                                .tint(.green)
                             }
                         }
                         .onDelete(perform: deleteSessions)
@@ -105,7 +127,7 @@ struct SessionHistoryView: View {
             .navigationTitle("Session History")
             .navigationBarTitleDisplayMode(.large)
             .navigationBarBackButtonHidden(true)
-            .toolbar {
+            .toolbar(content: {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Done") {
                         dismiss()
@@ -126,7 +148,7 @@ struct SessionHistoryView: View {
                             Divider()
                             
                             Button(role: .destructive) {
-                                sessionStorageService.clearAllSessions()
+                                showingClearAllConfirmation = true
                             } label: {
                                 Label("Clear All Sessions", systemImage: "trash")
                             }
@@ -135,11 +157,17 @@ struct SessionHistoryView: View {
                         }
                     }
                 }
-            }
+            })
         }
         .sheet(item: $sessionToShow) { session in
             NavigationView {
                 SessionDetailContentView(session: session)
+                    .environmentObject(sessionStorageService)
+            }
+        }
+        .sheet(isPresented: $showingEditSession) {
+            if let session = sessionToEdit {
+                EditSessionView(session: session)
                     .environmentObject(sessionStorageService)
             }
         }
@@ -148,6 +176,24 @@ struct SessionHistoryView: View {
                 ShareSheet(items: [data])
             }
         }
+        .alert("Delete Session", isPresented: $showingDeleteConfirmation) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                if let session = sessionToDelete {
+                    deleteSession(session)
+                }
+            }
+        } message: {
+            Text("Are you sure you want to delete this session? This action cannot be undone.")
+        }
+        .alert("Clear All Sessions", isPresented: $showingClearAllConfirmation) {
+            Button("Cancel", role: .cancel) { }
+            Button("Clear All", role: .destructive) {
+                sessionStorageService.clearAllSessions()
+            }
+        } message: {
+            Text("Are you sure you want to delete all sessions? This action cannot be undone.")
+        }
     }
     
     private func deleteSessions(offsets: IndexSet) {
@@ -155,6 +201,11 @@ struct SessionHistoryView: View {
             let session = filteredSessions[index]
             sessionStorageService.deleteSession(session)
         }
+    }
+    
+    private func deleteSession(_ session: ResuscitationSession) {
+        sessionStorageService.deleteSession(session)
+        sessionToDelete = nil
     }
     
     private func exportAllSessions() {
