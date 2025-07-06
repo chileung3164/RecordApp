@@ -324,45 +324,51 @@ class SmartResuscitationGuidelineSystem: ObservableObject, GuidelineSystemProtoc
         if currentPhase == .cprCycleManagement {
             currentCPRCycle += 1
             
-            if currentCPRCycle <= 10 {
-                // Start next CPR cycle - different behavior for shockable vs non-shockable
-                if selectedRhythm == .shockable {
-                    // pVT/VF pathway: needs shock before CPR
-                    cprCyclePhase = .waitingForShock
-                    shouldBlinkShockButtons = true
-                    shouldBlinkCPRButton = false
-                    shouldBlinkMedicationButtons = false
-                    
+            // Continue cycling indefinitely, with pattern repeating after cycle 10
+            // Start next CPR cycle - different behavior for shockable vs non-shockable
+            if selectedRhythm == .shockable {
+                // pVT/VF pathway: needs shock before CPR
+                cprCyclePhase = .waitingForShock
+                shouldBlinkShockButtons = true
+                shouldBlinkCPRButton = false
+                shouldBlinkMedicationButtons = false
+                
+                if currentCPRCycle <= 10 {
                     showGuideline(
                         message: "Starting CPR Cycle \(currentCPRCycle) - Check rhythm and deliver shock",
                         phase: .cprCycleManagement,
                         priority: .critical
                     )
-                } else if selectedRhythm == .nonShockable {
-                    // PEA/AS pathway: go directly to CPR (NO SHOCK)
-                    cprCyclePhase = .waitingForCPR
-                    shouldBlinkShockButtons = false  // NEVER blink for PEA/AS
-                    shouldBlinkCPRButton = true
-                    shouldBlinkMedicationButtons = false
-                    
+                } else {
+                    showGuideline(
+                        message: "Starting CPR Cycle \(currentCPRCycle) - Check rhythm and deliver shock (continuing pattern)",
+                        phase: .cprCycleManagement,
+                        priority: .critical
+                    )
+                }
+            } else if selectedRhythm == .nonShockable {
+                // PEA/AS pathway: go directly to CPR (NO SHOCK)
+                cprCyclePhase = .waitingForCPR
+                shouldBlinkShockButtons = false  // NEVER blink for PEA/AS
+                shouldBlinkCPRButton = true
+                shouldBlinkMedicationButtons = false
+                
+                if currentCPRCycle <= 10 {
                     showGuideline(
                         message: "Starting CPR Cycle \(currentCPRCycle) - Start CPR immediately (PEA/AS - no shock)",
                         phase: .cprCycleManagement,
                         priority: .critical
                     )
+                } else {
+                    showGuideline(
+                        message: "Starting CPR Cycle \(currentCPRCycle) - Start CPR immediately (PEA/AS - no shock, continuing pattern)",
+                        phase: .cprCycleManagement,
+                        priority: .critical
+                    )
                 }
-                
-                print("Starting CPR Cycle \(currentCPRCycle) - \(selectedRhythm == .shockable ? "pVT/VF" : "PEA/AS") pathway")
-            } else {
-                // All 10 cycles completed
-                showGuideline(
-                    message: "All 10 CPR cycles completed - Reassess patient condition",
-                    phase: .reevaluation,
-                    priority: .critical
-                )
-                
-                print("All 10 CPR cycles completed")
             }
+            
+            print("Starting CPR Cycle \(currentCPRCycle) - \(selectedRhythm == .shockable ? "pVT/VF" : "PEA/AS") pathway")
         }
     }
     
@@ -388,18 +394,32 @@ class SmartResuscitationGuidelineSystem: ObservableObject, GuidelineSystemProtoc
     private func shouldCycleHaveMedication(_ cycle: Int) -> Bool {
         if selectedRhythm == .shockable {
             // pVT/VF pathway
-            switch cycle {
-            case 2, 4, 6, 8, 10: return true  // Adrenaline cycles
-            case 3, 5: return true            // Amiodarone cycles
-            case 7, 9: return false           // No medication cycles
-            default: return false
+            if cycle <= 10 {
+                switch cycle {
+                case 2, 4, 6, 8, 10: return true  // Adrenaline cycles
+                case 3, 5: return true            // Amiodarone cycles
+                case 7, 9: return false           // No medication cycles
+                default: return false
+                }
+            } else {
+                // After cycle 10, repeat pattern of cycles 9 and 10
+                // Cycle 9 = no medication, Cycle 10 = adrenaline
+                let normalizedCycle = ((cycle - 9) % 2) + 9
+                return normalizedCycle == 10  // Only cycle 10 pattern has medication
             }
         } else if selectedRhythm == .nonShockable {
             // PEA/AS pathway - only Adrenaline on odd cycles
-            switch cycle {
-            case 1, 3, 5, 7, 9: return true   // Adrenaline cycles
-            case 2, 4, 6, 8, 10: return false // No medication cycles
-            default: return false
+            if cycle <= 10 {
+                switch cycle {
+                case 1, 3, 5, 7, 9: return true   // Adrenaline cycles
+                case 2, 4, 6, 8, 10: return false // No medication cycles
+                default: return false
+                }
+            } else {
+                // After cycle 10, repeat pattern of cycles 9 and 10
+                // Cycle 9 = adrenaline, Cycle 10 = no medication
+                let normalizedCycle = ((cycle - 9) % 2) + 9
+                return normalizedCycle == 9  // Only cycle 9 pattern has medication
             }
         }
         return false
@@ -408,18 +428,40 @@ class SmartResuscitationGuidelineSystem: ObservableObject, GuidelineSystemProtoc
     private func getMedicationMessageForCycle(_ cycle: Int) -> String {
         if selectedRhythm == .shockable {
             // pVT/VF pathway
-            switch cycle {
-            case 2, 4, 6, 8, 10: return "Administer Adrenaline"
-            case 3: return "Administer Amiodarone 300mg (1st dose)"
-            case 5: return "Administer Amiodarone 150mg (2nd dose)"
-            default: return "No medication needed this cycle"
+            if cycle <= 10 {
+                switch cycle {
+                case 2, 4, 6, 8, 10: return "Administer Adrenaline"
+                case 3: return "Administer Amiodarone 300mg (1st dose)"
+                case 5: return "Administer Amiodarone 150mg (2nd dose)"
+                default: return "No medication needed this cycle"
+                }
+            } else {
+                // After cycle 10, repeat pattern of cycles 9 and 10
+                // Cycle 9 = no medication, Cycle 10 = adrenaline
+                let normalizedCycle = ((cycle - 9) % 2) + 9
+                if normalizedCycle == 10 {
+                    return "Administer Adrenaline"
+                } else {
+                    return "No medication needed this cycle"
+                }
             }
         } else if selectedRhythm == .nonShockable {
             // PEA/AS pathway - only Adrenaline
-            switch cycle {
-            case 1, 3, 5, 7, 9: return "Administer Adrenaline"
-            case 2, 4, 6, 8, 10: return "No medication needed this cycle"
-            default: return "No medication needed this cycle"
+            if cycle <= 10 {
+                switch cycle {
+                case 1, 3, 5, 7, 9: return "Administer Adrenaline"
+                case 2, 4, 6, 8, 10: return "No medication needed this cycle"
+                default: return "No medication needed this cycle"
+                }
+            } else {
+                // After cycle 10, repeat pattern of cycles 9 and 10
+                // Cycle 9 = adrenaline, Cycle 10 = no medication
+                let normalizedCycle = ((cycle - 9) % 2) + 9
+                if normalizedCycle == 9 {
+                    return "Administer Adrenaline"
+                } else {
+                    return "No medication needed this cycle"
+                }
             }
         }
         return "No medication needed this cycle"
@@ -538,10 +580,24 @@ class SmartResuscitationGuidelineSystem: ObservableObject, GuidelineSystemProtoc
         
         if selectedRhythm == .shockable {
             // pVT/VF pathway - Adrenaline on cycles 2, 4, 6, 8, 10
-            return [2, 4, 6, 8, 10].contains(currentCPRCycle)
+            if currentCPRCycle <= 10 {
+                return [2, 4, 6, 8, 10].contains(currentCPRCycle)
+            } else {
+                // After cycle 10, repeat pattern of cycles 9 and 10
+                // Only cycle 10 pattern has adrenaline
+                let normalizedCycle = ((currentCPRCycle - 9) % 2) + 9
+                return normalizedCycle == 10
+            }
         } else if selectedRhythm == .nonShockable {
             // PEA/AS pathway - Adrenaline on cycles 1, 3, 5, 7, 9
-            return [1, 3, 5, 7, 9].contains(currentCPRCycle)
+            if currentCPRCycle <= 10 {
+                return [1, 3, 5, 7, 9].contains(currentCPRCycle)
+            } else {
+                // After cycle 10, repeat pattern of cycles 9 and 10
+                // Only cycle 9 pattern has adrenaline
+                let normalizedCycle = ((currentCPRCycle - 9) % 2) + 9
+                return normalizedCycle == 9
+            }
         }
         
         return false
@@ -553,7 +609,8 @@ class SmartResuscitationGuidelineSystem: ObservableObject, GuidelineSystemProtoc
         }
         
         // Amiodarone only for pVT/VF pathway on cycles 3, 5
-        return selectedRhythm == .shockable && [3, 5].contains(currentCPRCycle)
+        // After cycle 10, repeating pattern of cycles 9 and 10 doesn't include amiodarone
+        return selectedRhythm == .shockable && currentCPRCycle <= 10 && [3, 5].contains(currentCPRCycle)
     }
     
     enum ButtonType {
