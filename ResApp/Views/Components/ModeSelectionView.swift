@@ -7,45 +7,7 @@ struct ModeSelectionView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                // MARK: - Header Section
-                VStack(spacing: 16) {
-                    // App Icon and Title
-                    HStack(spacing: 16) {
-                        Image(systemName: "heart.text.square.fill")
-                            .font(.system(size: 50, weight: .medium))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [.red, .pink],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("ResApp")
-                                .font(.system(size: 32, weight: .bold, design: .rounded))
-                                .foregroundColor(.primary)
-                            
-                            Text("Resuscitation Assistant")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 20)
-                    
-                    // Subtitle
-                    Text("Professional medical training and clinical support")
-                        .font(.system(size: 18, weight: .regular))
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 32)
-                }
-                .padding(.bottom, 40)
-                
-                // MARK: - Mode Selection Cards
+                // MARK: - Mode Selection Cards with Top Padding
                 VStack(spacing: 20) {
                     Text("Choose Your Mode")
                         .font(.system(size: 24, weight: .semibold))
@@ -85,9 +47,8 @@ struct ModeSelectionView: View {
                     }
                     .padding(.horizontal, 24)
                 }
+                .padding(.top, 160)
                 .padding(.bottom, 40)
-                
-
                 
                 // MARK: - Footer Section
                 VStack(spacing: 20) {
@@ -118,8 +79,29 @@ struct ModeSelectionView: View {
                         .font(.system(size: 12, weight: .regular))
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
+                        .padding(.vertical, 10)
+                    
+                    // Organization Logos - Left and Right
+                    HStack {
+                        // QEH Logo (Left)
+                        Image("QEH")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 140)
+                            .cornerRadius(8)
+                        
+                        Spacer()
+                        
+                        // MDSSC Logo (Right)
+                        Image("MDSSC")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 140)
+                            .cornerRadius(8)
+                    }
+                    .padding(.horizontal, 32)
+                    .padding(.bottom, 80)
                 }
-                .padding(.bottom, 30)
             }
         }
         .background(Color(.systemBackground))

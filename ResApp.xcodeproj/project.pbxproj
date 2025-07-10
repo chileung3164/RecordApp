@@ -379,7 +379,8 @@
 				91DB0F162C7F2CFB005E85DE /* buzzer.wav in Resources */,
 				91C80FC62C636B8C00E87A87 /* Preview Assets.xcassets in Resources */,
 				91C80FC32C636B8C00E87A87 /* Assets.xcassets in Resources */,
-				91AE390C2C7D903E008E5409 /* level-up-191997.mp3 in Resources */,);
+				91AE390C2C7D903E008E5409 /* level-up-191997.mp3 in Resources */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		91C80FC92C636B8C00E87A87 /* Resources */ = {
