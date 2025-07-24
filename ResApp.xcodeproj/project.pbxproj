@@ -7,40 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		91AE390C2C7D903E008E5409 /* level-up-191997.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91AE390B2C7D903E008E5409 /* level-up-191997.mp3 */; };
-		91C33EE22C786C190092BCE3 /* ResuscitationSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */; };
-		91C33EE42C786C390092BCE3 /* ResuscitationGuidelineSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */; };
+		2018CC46556D4C539E3DD214 /* Views/Components/AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D94E777283044FB8EC3C3E8 /* Views/Components/AddEventView.swift */; };
+		6F269030165D41AF98BDB7FA /* Views/Components/EditSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B11EA266E04456B43EC4AB /* Views/Components/EditSessionView.swift */; };
+		91AE390C2C7D903E008E5409 /* Resources/level-up-191997.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 91AE390B2C7D903E008E5409 /* Resources/level-up-191997.mp3 */; };
+		91C33EE22C786C190092BCE3 /* Views/ResuscitationSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C33EE12C786C190092BCE3 /* Views/ResuscitationSummaryView.swift */; };
+		91C33EE42C786C390092BCE3 /* Services/ResuscitationGuidelineSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C33EE32C786C390092BCE3 /* Services/ResuscitationGuidelineSystem.swift */; };
 		91C80FBF2C636B8800E87A87 /* ResAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FBE2C636B8800E87A87 /* ResAppApp.swift */; };
-		91C80FC12C636B8800E87A87 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FC02C636B8800E87A87 /* ContentView.swift */; };
+		91C80FC12C636B8800E87A87 /* Views/ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FC02C636B8800E87A87 /* Views/ContentView.swift */; };
 		91C80FC32C636B8C00E87A87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91C80FC22C636B8C00E87A87 /* Assets.xcassets */; };
 		91C80FC62C636B8C00E87A87 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91C80FC52C636B8C00E87A87 /* Preview Assets.xcassets */; };
 		91C80FD02C636B8C00E87A87 /* ResAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FCF2C636B8C00E87A87 /* ResAppTests.swift */; };
 		91C80FDA2C636B8C00E87A87 /* ResAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FD92C636B8C00E87A87 /* ResAppUITests.swift */; };
 		91C80FDC2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */; };
-		91C80FE92C636BC600E87A87 /* ResuscitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */; };
-		91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */; };
-		91DB0F162C7F2CFB005E85DE /* buzzer.wav in Resources */ = {isa = PBXBuildFile; fileRef = 91DB0F152C7F2CFB005E85DE /* buzzer.wav */; };
-		92NEW0012C000001008E5409 /* ResuscitationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0011C000001008E5409 /* ResuscitationModels.swift */; };
-		92NEW0022C000002008E5409 /* ResuscitationProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0021C000002008E5409 /* ResuscitationProtocols.swift */; };
-		92NEW0032C000003008E5409 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0031C000003008E5409 /* AudioService.swift */; };
-		92NEW0042C000004008E5409 /* TimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0041C000004008E5409 /* TimerService.swift */; };
-		92NEW0052C000005008E5409 /* CPRProtocolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0051C000005008E5409 /* CPRProtocolManager.swift */; };
-		92NEW0062C000006008E5409 /* ModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0061C000006008E5409 /* ModeSelectionView.swift */; };
-		92NEW0072C000007008E5409 /* InstructorModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0071C000007008E5409 /* InstructorModeView.swift */; };
-		92NEW0082C000008008E5409 /* NormalUserModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0081C000008008E5409 /* NormalUserModeView.swift */; };
-		92NEW0092C000009008E5409 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0091C000009008E5409 /* InfoView.swift */; };
-		92NEW0102C000010008E5409 /* ResuscitationRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0101C000010008E5409 /* ResuscitationRecordView.swift */; };
-		92NEW0112C000011008E5409 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0111C000011008E5409 /* ButtonStyles.swift */; };
-		92NEW0122C000012008E5409 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0121C000012008E5409 /* Extensions.swift */; };
-		92NEW0132C000013008E5409 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0131C000013008E5409 /* Constants.swift */; };
-		93NEW0152C000015008E5409 /* SessionStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0142C000014008E5409 /* SessionStorageService.swift */; };
-		93NEW0172C000017008E5409 /* SessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0162C000016008E5409 /* SessionHistoryView.swift */; };
-		93NEW0192C000019008E5409 /* SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0182C000018008E5409 /* SessionDetailView.swift */; };
-		A1PDF0012C000020008E5409 /* PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1PDF0022C000021008E5409 /* PDFExportService.swift */; };
-		A1SHARE012C000022008E5409 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1SHARE022C000023008E5409 /* ShareSheet.swift */; };
-		6F269030165D41AF98BDB7FA /* EditSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B11EA266E04456B43EC4AB /* EditSessionView.swift */; };
-		F6523D5F80D64784AC9C5A34 /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68E2A5AE68C4132A93C7E58 /* EditEventView.swift */; };
-		2018CC46556D4C539E3DD214 /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D94E777283044FB8EC3C3E8 /* AddEventView.swift */; };
+		91C80FE92C636BC600E87A87 /* Managers/ResuscitationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FE82C636BC600E87A87 /* Managers/ResuscitationManager.swift */; };
+		91C80FEB2C636BDB00E87A87 /* Views/FunctionalButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C80FEA2C636BDB00E87A87 /* Views/FunctionalButtonView.swift */; };
+		91DB0F162C7F2CFB005E85DE /* Resources/buzzer.wav in Resources */ = {isa = PBXBuildFile; fileRef = 91DB0F152C7F2CFB005E85DE /* Resources/buzzer.wav */; };
+		92NEW0012C000001008E5409 /* Models/ResuscitationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0011C000001008E5409 /* Models/ResuscitationModels.swift */; };
+		92NEW0022C000002008E5409 /* Protocols/ResuscitationProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0021C000002008E5409 /* Protocols/ResuscitationProtocols.swift */; };
+		92NEW0032C000003008E5409 /* Services/AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0031C000003008E5409 /* Services/AudioService.swift */; };
+		92NEW0042C000004008E5409 /* Services/TimerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0041C000004008E5409 /* Services/TimerService.swift */; };
+		92NEW0052C000005008E5409 /* Managers/CPRProtocolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0051C000005008E5409 /* Managers/CPRProtocolManager.swift */; };
+		92NEW0062C000006008E5409 /* Views/Components/ModeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0061C000006008E5409 /* Views/Components/ModeSelectionView.swift */; };
+		92NEW0072C000007008E5409 /* Views/Components/InstructorModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0071C000007008E5409 /* Views/Components/InstructorModeView.swift */; };
+		92NEW0082C000008008E5409 /* Views/Components/NormalUserModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0081C000008008E5409 /* Views/Components/NormalUserModeView.swift */; };
+		92NEW0092C000009008E5409 /* Views/Components/InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0091C000009008E5409 /* Views/Components/InfoView.swift */; };
+		92NEW0102C000010008E5409 /* Views/Components/ResuscitationRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0101C000010008E5409 /* Views/Components/ResuscitationRecordView.swift */; };
+		92NEW0112C000011008E5409 /* Views/Components/ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0111C000011008E5409 /* Views/Components/ButtonStyles.swift */; };
+		92NEW0122C000012008E5409 /* Utils/Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0121C000012008E5409 /* Utils/Extensions.swift */; };
+		92NEW0132C000013008E5409 /* Utils/Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92NEW0131C000013008E5409 /* Utils/Constants.swift */; };
+		93NEW0152C000015008E5409 /* Services/SessionStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0142C000014008E5409 /* Services/SessionStorageService.swift */; };
+		93NEW0172C000017008E5409 /* Views/Components/SessionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0162C000016008E5409 /* Views/Components/SessionHistoryView.swift */; };
+		93NEW0192C000019008E5409 /* Views/Components/SessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93NEW0182C000018008E5409 /* Views/Components/SessionDetailView.swift */; };
+		A1PDF0012C000020008E5409 /* Services/PDFExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1PDF0022C000021008E5409 /* Services/PDFExportService.swift */; };
+		A1SHARE012C000022008E5409 /* Utils/ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1SHARE022C000023008E5409 /* Utils/ShareSheet.swift */; };
+		F6523D5F80D64784AC9C5A34 /* Views/Components/EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68E2A5AE68C4132A93C7E58 /* Views/Components/EditEventView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,12 +61,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		91AE390B2C7D903E008E5409 /* level-up-191997.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Resources/level-up-191997.mp3"; sourceTree = "<group>"; };
-		91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ResuscitationSummaryView.swift; sourceTree = "<group>"; };
-		91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/ResuscitationGuidelineSystem.swift; sourceTree = "<group>"; };
+		7D94E777283044FB8EC3C3E8 /* Views/Components/AddEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/AddEventView.swift; sourceTree = "<group>"; };
+		91AE390B2C7D903E008E5409 /* Resources/level-up-191997.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Resources/level-up-191997.mp3"; sourceTree = "<group>"; };
+		91C33EE12C786C190092BCE3 /* Views/ResuscitationSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ResuscitationSummaryView.swift; sourceTree = "<group>"; };
+		91C33EE32C786C390092BCE3 /* Services/ResuscitationGuidelineSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/ResuscitationGuidelineSystem.swift; sourceTree = "<group>"; };
 		91C80FBB2C636B8800E87A87 /* ResApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C80FBE2C636B8800E87A87 /* ResAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppApp.swift; sourceTree = "<group>"; };
-		91C80FC02C636B8800E87A87 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ContentView.swift; sourceTree = "<group>"; };
+		91C80FC02C636B8800E87A87 /* Views/ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ContentView.swift; sourceTree = "<group>"; };
 		91C80FC22C636B8C00E87A87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91C80FC52C636B8C00E87A87 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		91C80FCB2C636B8C00E87A87 /* ResAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,30 +75,29 @@
 		91C80FD52C636B8C00E87A87 /* ResAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ResAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C80FD92C636B8C00E87A87 /* ResAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppUITests.swift; sourceTree = "<group>"; };
 		91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managers/ResuscitationManager.swift; sourceTree = "<group>"; };
-		91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/FunctionalButtonView.swift; sourceTree = "<group>"; };
-		91DB0F152C7F2CFB005E85DE /* buzzer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/buzzer.wav; sourceTree = "<group>"; };
-		92NEW0011C000001008E5409 /* ResuscitationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/ResuscitationModels.swift; sourceTree = "<group>"; };
-		92NEW0021C000002008E5409 /* ResuscitationProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols/ResuscitationProtocols.swift; sourceTree = "<group>"; };
-		92NEW0031C000003008E5409 /* AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/AudioService.swift; sourceTree = "<group>"; };
-		92NEW0041C000004008E5409 /* TimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/TimerService.swift; sourceTree = "<group>"; };
-		92NEW0051C000005008E5409 /* CPRProtocolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managers/CPRProtocolManager.swift; sourceTree = "<group>"; };
-		92NEW0061C000006008E5409 /* ModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ModeSelectionView.swift; sourceTree = "<group>"; };
-		92NEW0071C000007008E5409 /* InstructorModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/InstructorModeView.swift; sourceTree = "<group>"; };
-		92NEW0081C000008008E5409 /* NormalUserModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/NormalUserModeView.swift; sourceTree = "<group>"; };
-		92NEW0091C000009008E5409 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/InfoView.swift; sourceTree = "<group>"; };
-		92NEW0101C000010008E5409 /* ResuscitationRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ResuscitationRecordView.swift; sourceTree = "<group>"; };
-		92NEW0111C000011008E5409 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ButtonStyles.swift; sourceTree = "<group>"; };
-		92NEW0121C000012008E5409 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/Extensions.swift; sourceTree = "<group>"; };
-		92NEW0131C000013008E5409 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/Constants.swift; sourceTree = "<group>"; };
-		93NEW0142C000014008E5409 /* SessionStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SessionStorageService.swift; sourceTree = "<group>"; };
-		93NEW0162C000016008E5409 /* SessionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/SessionHistoryView.swift; sourceTree = "<group>"; };
-		93NEW0182C000018008E5409 /* SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/SessionDetailView.swift; sourceTree = "<group>"; };
-		A1PDF0022C000021008E5409 /* PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/PDFExportService.swift; sourceTree = "<group>"; };
-		A1SHARE022C000023008E5409 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/ShareSheet.swift; sourceTree = "<group>"; };
-		96B11EA266E04456B43EC4AB /* EditSessionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/EditSessionView.swift; sourceTree = "<group>"; };
-		A68E2A5AE68C4132A93C7E58 /* EditEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/EditEventView.swift; sourceTree = "<group>"; };
-		7D94E777283044FB8EC3C3E8 /* AddEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/AddEventView.swift; sourceTree = "<group>"; };
+		91C80FE82C636BC600E87A87 /* Managers/ResuscitationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managers/ResuscitationManager.swift; sourceTree = "<group>"; };
+		91C80FEA2C636BDB00E87A87 /* Views/FunctionalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/FunctionalButtonView.swift; sourceTree = "<group>"; };
+		91DB0F152C7F2CFB005E85DE /* Resources/buzzer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Resources/buzzer.wav; sourceTree = "<group>"; };
+		92NEW0011C000001008E5409 /* Models/ResuscitationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models/ResuscitationModels.swift; sourceTree = "<group>"; };
+		92NEW0021C000002008E5409 /* Protocols/ResuscitationProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols/ResuscitationProtocols.swift; sourceTree = "<group>"; };
+		92NEW0031C000003008E5409 /* Services/AudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/AudioService.swift; sourceTree = "<group>"; };
+		92NEW0041C000004008E5409 /* Services/TimerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/TimerService.swift; sourceTree = "<group>"; };
+		92NEW0051C000005008E5409 /* Managers/CPRProtocolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managers/CPRProtocolManager.swift; sourceTree = "<group>"; };
+		92NEW0061C000006008E5409 /* Views/Components/ModeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ModeSelectionView.swift; sourceTree = "<group>"; };
+		92NEW0071C000007008E5409 /* Views/Components/InstructorModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/InstructorModeView.swift; sourceTree = "<group>"; };
+		92NEW0081C000008008E5409 /* Views/Components/NormalUserModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/NormalUserModeView.swift; sourceTree = "<group>"; };
+		92NEW0091C000009008E5409 /* Views/Components/InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/InfoView.swift; sourceTree = "<group>"; };
+		92NEW0101C000010008E5409 /* Views/Components/ResuscitationRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ResuscitationRecordView.swift; sourceTree = "<group>"; };
+		92NEW0111C000011008E5409 /* Views/Components/ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ButtonStyles.swift; sourceTree = "<group>"; };
+		92NEW0121C000012008E5409 /* Utils/Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/Extensions.swift; sourceTree = "<group>"; };
+		92NEW0131C000013008E5409 /* Utils/Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/Constants.swift; sourceTree = "<group>"; };
+		93NEW0142C000014008E5409 /* Services/SessionStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SessionStorageService.swift; sourceTree = "<group>"; };
+		93NEW0162C000016008E5409 /* Views/Components/SessionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/SessionHistoryView.swift; sourceTree = "<group>"; };
+		93NEW0182C000018008E5409 /* Views/Components/SessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/SessionDetailView.swift; sourceTree = "<group>"; };
+		96B11EA266E04456B43EC4AB /* Views/Components/EditSessionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/EditSessionView.swift; sourceTree = "<group>"; };
+		A1PDF0022C000021008E5409 /* Services/PDFExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/PDFExportService.swift; sourceTree = "<group>"; };
+		A1SHARE022C000023008E5409 /* Utils/ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils/ShareSheet.swift; sourceTree = "<group>"; };
+		A68E2A5AE68C4132A93C7E58 /* Views/Components/EditEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views/Components/EditEventView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,91 +162,6 @@
 			path = ResApp;
 			sourceTree = "<group>";
 		};
-		92NEW1002C000100008E5409 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				92NEW0011C000001008E5409 /* ResuscitationModels.swift */,
-			);
-			name = Models;
-			sourceTree = "<group>";
-		};
-		92NEW1012C000101008E5409 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				91C80FC02C636B8800E87A87 /* ContentView.swift */,
-				91C80FEA2C636BDB00E87A87 /* FunctionalButtonView.swift */,
-				91C33EE12C786C190092BCE3 /* ResuscitationSummaryView.swift */,
-				92NEW1072C000107008E5409 /* Components */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
-		92NEW1022C000102008E5409 /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				91C80FE82C636BC600E87A87 /* ResuscitationManager.swift */,
-				92NEW0051C000005008E5409 /* CPRProtocolManager.swift */,
-			);
-			name = Managers;
-			sourceTree = "<group>";
-		};
-		92NEW1032C000103008E5409 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				91C33EE32C786C390092BCE3 /* ResuscitationGuidelineSystem.swift */,
-				92NEW0031C000003008E5409 /* AudioService.swift */,
-				92NEW0041C000004008E5409 /* TimerService.swift */,
-				93NEW0142C000014008E5409 /* SessionStorageService.swift */,
-				A1PDF0022C000021008E5409 /* PDFExportService.swift */,
-			);
-			name = Services;
-			sourceTree = "<group>";
-		};
-		92NEW1042C000104008E5409 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				92NEW0021C000002008E5409 /* ResuscitationProtocols.swift */,
-			);
-			name = Protocols;
-			sourceTree = "<group>";
-		};
-		92NEW1052C000105008E5409 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				92NEW0121C000012008E5409 /* Extensions.swift */,
-				92NEW0131C000013008E5409 /* Constants.swift */,
-				A1SHARE022C000023008E5409 /* ShareSheet.swift */,
-			);
-			name = Utils;
-			sourceTree = "<group>";
-		};
-		92NEW1062C000106008E5409 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				91DB0F152C7F2CFB005E85DE /* buzzer.wav */,
-				91AE390B2C7D903E008E5409 /* level-up-191997.mp3 */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
-		92NEW1072C000107008E5409 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				92NEW0061C000006008E5409 /* ModeSelectionView.swift */,
-				92NEW0071C000007008E5409 /* InstructorModeView.swift */,
-				92NEW0081C000008008E5409 /* NormalUserModeView.swift */,
-				92NEW0091C000009008E5409 /* InfoView.swift */,
-				92NEW0101C000010008E5409 /* ResuscitationRecordView.swift */,
-				92NEW0111C000011008E5409 /* ButtonStyles.swift */,
-				93NEW0162C000016008E5409 /* SessionHistoryView.swift */,
-				93NEW0182C000018008E5409 /* SessionDetailView.swift */,
-							96B11EA266E04456B43EC4AB /* EditSessionView.swift */,
-				A68E2A5AE68C4132A93C7E58 /* EditEventView.swift */,
-				7D94E777283044FB8EC3C3E8 /* AddEventView.swift */,
-);
-			name = Components;
-			sourceTree = "<group>";
-		};
 		91C80FC42C636B8C00E87A87 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -270,6 +185,91 @@
 				91C80FDB2C636B8C00E87A87 /* ResAppUITestsLaunchTests.swift */,
 			);
 			path = ResAppUITests;
+			sourceTree = "<group>";
+		};
+		92NEW1002C000100008E5409 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				92NEW0011C000001008E5409 /* Models/ResuscitationModels.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		92NEW1012C000101008E5409 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				91C80FC02C636B8800E87A87 /* Views/ContentView.swift */,
+				91C80FEA2C636BDB00E87A87 /* Views/FunctionalButtonView.swift */,
+				91C33EE12C786C190092BCE3 /* Views/ResuscitationSummaryView.swift */,
+				92NEW1072C000107008E5409 /* Components */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		92NEW1022C000102008E5409 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				91C80FE82C636BC600E87A87 /* Managers/ResuscitationManager.swift */,
+				92NEW0051C000005008E5409 /* Managers/CPRProtocolManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		92NEW1032C000103008E5409 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				91C33EE32C786C390092BCE3 /* Services/ResuscitationGuidelineSystem.swift */,
+				92NEW0031C000003008E5409 /* Services/AudioService.swift */,
+				92NEW0041C000004008E5409 /* Services/TimerService.swift */,
+				93NEW0142C000014008E5409 /* Services/SessionStorageService.swift */,
+				A1PDF0022C000021008E5409 /* Services/PDFExportService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		92NEW1042C000104008E5409 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				92NEW0021C000002008E5409 /* Protocols/ResuscitationProtocols.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		92NEW1052C000105008E5409 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				92NEW0121C000012008E5409 /* Utils/Extensions.swift */,
+				92NEW0131C000013008E5409 /* Utils/Constants.swift */,
+				A1SHARE022C000023008E5409 /* Utils/ShareSheet.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		92NEW1062C000106008E5409 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				91DB0F152C7F2CFB005E85DE /* Resources/buzzer.wav */,
+				91AE390B2C7D903E008E5409 /* Resources/level-up-191997.mp3 */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		92NEW1072C000107008E5409 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				92NEW0061C000006008E5409 /* Views/Components/ModeSelectionView.swift */,
+				92NEW0071C000007008E5409 /* Views/Components/InstructorModeView.swift */,
+				92NEW0081C000008008E5409 /* Views/Components/NormalUserModeView.swift */,
+				92NEW0091C000009008E5409 /* Views/Components/InfoView.swift */,
+				92NEW0101C000010008E5409 /* Views/Components/ResuscitationRecordView.swift */,
+				92NEW0111C000011008E5409 /* Views/Components/ButtonStyles.swift */,
+				93NEW0162C000016008E5409 /* Views/Components/SessionHistoryView.swift */,
+				93NEW0182C000018008E5409 /* Views/Components/SessionDetailView.swift */,
+				96B11EA266E04456B43EC4AB /* Views/Components/EditSessionView.swift */,
+				A68E2A5AE68C4132A93C7E58 /* Views/Components/EditEventView.swift */,
+				7D94E777283044FB8EC3C3E8 /* Views/Components/AddEventView.swift */,
+			);
+			name = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -376,10 +376,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91DB0F162C7F2CFB005E85DE /* buzzer.wav in Resources */,
+				91DB0F162C7F2CFB005E85DE /* Resources/buzzer.wav in Resources */,
 				91C80FC62C636B8C00E87A87 /* Preview Assets.xcassets in Resources */,
 				91C80FC32C636B8C00E87A87 /* Assets.xcassets in Resources */,
-				91AE390C2C7D903E008E5409 /* level-up-191997.mp3 in Resources */,
+				91AE390C2C7D903E008E5409 /* Resources/level-up-191997.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,33 +404,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91C33EE22C786C190092BCE3 /* ResuscitationSummaryView.swift in Sources */,
-				91C80FC12C636B8800E87A87 /* ContentView.swift in Sources */,
-				91C80FE92C636BC600E87A87 /* ResuscitationManager.swift in Sources */,
+				91C33EE22C786C190092BCE3 /* Views/ResuscitationSummaryView.swift in Sources */,
+				91C80FC12C636B8800E87A87 /* Views/ContentView.swift in Sources */,
+				91C80FE92C636BC600E87A87 /* Managers/ResuscitationManager.swift in Sources */,
 				91C80FBF2C636B8800E87A87 /* ResAppApp.swift in Sources */,
-				91C80FEB2C636BDB00E87A87 /* FunctionalButtonView.swift in Sources */,
-				91C33EE42C786C390092BCE3 /* ResuscitationGuidelineSystem.swift in Sources */,
-				92NEW0012C000001008E5409 /* ResuscitationModels.swift in Sources */,
-				92NEW0022C000002008E5409 /* ResuscitationProtocols.swift in Sources */,
-				92NEW0032C000003008E5409 /* AudioService.swift in Sources */,
-				92NEW0042C000004008E5409 /* TimerService.swift in Sources */,
-				92NEW0052C000005008E5409 /* CPRProtocolManager.swift in Sources */,
-				92NEW0062C000006008E5409 /* ModeSelectionView.swift in Sources */,
-				92NEW0072C000007008E5409 /* InstructorModeView.swift in Sources */,
-				92NEW0082C000008008E5409 /* NormalUserModeView.swift in Sources */,
-				92NEW0092C000009008E5409 /* InfoView.swift in Sources */,
-				92NEW0102C000010008E5409 /* ResuscitationRecordView.swift in Sources */,
-				92NEW0112C000011008E5409 /* ButtonStyles.swift in Sources */,
-				92NEW0122C000012008E5409 /* Extensions.swift in Sources */,
-				92NEW0132C000013008E5409 /* Constants.swift in Sources */,
-				93NEW0152C000015008E5409 /* SessionStorageService.swift in Sources */,
-				93NEW0172C000017008E5409 /* SessionHistoryView.swift in Sources */,
-				93NEW0192C000019008E5409 /* SessionDetailView.swift in Sources */,
-				A1PDF0012C000020008E5409 /* PDFExportService.swift in Sources */,
-				A1SHARE012C000022008E5409 /* ShareSheet.swift in Sources */,
-				6F269030165D41AF98BDB7FA /* EditSessionView.swift in Sources */,
-				F6523D5F80D64784AC9C5A34 /* EditEventView.swift in Sources */,
-				2018CC46556D4C539E3DD214 /* AddEventView.swift in Sources */,
+				91C80FEB2C636BDB00E87A87 /* Views/FunctionalButtonView.swift in Sources */,
+				91C33EE42C786C390092BCE3 /* Services/ResuscitationGuidelineSystem.swift in Sources */,
+				92NEW0012C000001008E5409 /* Models/ResuscitationModels.swift in Sources */,
+				92NEW0022C000002008E5409 /* Protocols/ResuscitationProtocols.swift in Sources */,
+				92NEW0032C000003008E5409 /* Services/AudioService.swift in Sources */,
+				92NEW0042C000004008E5409 /* Services/TimerService.swift in Sources */,
+				92NEW0052C000005008E5409 /* Managers/CPRProtocolManager.swift in Sources */,
+				92NEW0062C000006008E5409 /* Views/Components/ModeSelectionView.swift in Sources */,
+				92NEW0072C000007008E5409 /* Views/Components/InstructorModeView.swift in Sources */,
+				92NEW0082C000008008E5409 /* Views/Components/NormalUserModeView.swift in Sources */,
+				92NEW0092C000009008E5409 /* Views/Components/InfoView.swift in Sources */,
+				92NEW0102C000010008E5409 /* Views/Components/ResuscitationRecordView.swift in Sources */,
+				92NEW0112C000011008E5409 /* Views/Components/ButtonStyles.swift in Sources */,
+				92NEW0122C000012008E5409 /* Utils/Extensions.swift in Sources */,
+				92NEW0132C000013008E5409 /* Utils/Constants.swift in Sources */,
+				93NEW0152C000015008E5409 /* Services/SessionStorageService.swift in Sources */,
+				93NEW0172C000017008E5409 /* Views/Components/SessionHistoryView.swift in Sources */,
+				93NEW0192C000019008E5409 /* Views/Components/SessionDetailView.swift in Sources */,
+				A1PDF0012C000020008E5409 /* Services/PDFExportService.swift in Sources */,
+				A1SHARE012C000022008E5409 /* Utils/ShareSheet.swift in Sources */,
+				6F269030165D41AF98BDB7FA /* Views/Components/EditSessionView.swift in Sources */,
+				F6523D5F80D64784AC9C5A34 /* Views/Components/EditEventView.swift in Sources */,
+				2018CC46556D4C539E3DD214 /* Views/Components/AddEventView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,7 +607,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.calvinlau.ResApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.calvinlau.RecordApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -636,7 +636,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.calvinlau.ResApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.calvinlau.RecordApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
